@@ -1,0 +1,134 @@
+{% extends "../utils/layout.html" %} 
+{% load static %}
+
+
+
+{% block body %}
+<h3 class="text-center">User Registeration Form</h3>
+<hr />
+  <div class="row">
+      <div class="col-md-12">
+        <form method="post" class="needs-validation" novalidate>
+          {% csrf_token %}
+          <div class="row">
+            <div class="mb-3 col-md-6">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" required autocomplete="off"/>
+              <div class="invalid-feedback">
+                Please fill this area.
+              </div>
+
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="surname" class="form-label">Surname</label>
+              <input type="text" class="form-control" id="surname" name="surname" required autocomplete="off"/>
+              <div class="invalid-feedback">
+                Please fill this area.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required autocomplete="off"/>
+                <div class="invalid-feedback">
+                    Please fill this area.
+                </div>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required autocomplete="off"/>
+                <div class="invalid-feedback">
+                    Please fill this area.
+                </div>
+              </div>
+
+          </div>
+          
+          <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required autocomplete="off"/>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required autocomplete="off"/>
+              </div>
+            </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="birthdate" class="form-label">Birth Date</label>
+                <input
+                  class="date-input form-control"
+                  type="date"
+                  id="birthdate"
+                  name="birthdate" required autocomplete="off"
+                />
+                <div class="invalid-feedback">
+                    Please fill this area.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender">
+                  <option value="male" selected>Male</option>
+                  <option value="female">Female</option>
+                  <option value="nonbinary">Non-Binary</option>
+                  <option value="transgender">Transgender</option>
+                  <option value="attackhelicopter">Attack Helicopter</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <select class="form-select" id="location" name="location">
+                    <option value="istanbul" selected>Istanbul</option>
+                    <option value="izmir">İzmir</option>
+                  </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" autocomplete="off" class="form-control" id="phone" name="phone" required/>
+                <div class="invalid-feedback">
+                 Please fill this area.
+                </div>
+              </div>
+            </div>
+          </div>   
+          <div class="text-center">
+            <button style="width:100%" type="submit" class="btn btn-primary mt-4 mb-4">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+{% endblock body %}
+
+{% block script %}
+<script>
+  (() => {
+    'use strict'
+  
+    const forms = document.querySelectorAll('.needs-validation')
+
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+  
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
+{% endblock script %}
+
