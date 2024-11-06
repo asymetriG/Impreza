@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import User as CustomUserModel 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,logout
 from django.contrib.auth import login as django_login
 
 def index(request):
@@ -87,3 +87,10 @@ def login(request):
     else:
         
         return render(request,"authentication/login.html")
+    
+    
+    
+def logout_view(request):
+    logout(request)
+    messages.success(request, "You have successfully logged out.")
+    return redirect('index')  # Redirect to the homepage or any other page
