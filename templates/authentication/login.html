@@ -20,7 +20,7 @@
 
           <label for="password" class="form-label mt-3">Password</label>
             <input type="password" class="form-control mt-2 mb-2" id="password" name="password" required autocomplete="off"/>
-            <a href="#" class="link-underline link-underline-opacity-0">Forgot Password?</a> 
+            <a href="{% url 'authentication:forgot_password' %}" class="link-underline link-underline-opacity-0">Forgot Password?</a> 
             <div class="invalid-feedback">
                 Please fill this area.
             </div>    

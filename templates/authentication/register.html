@@ -103,6 +103,34 @@
               </div>
             </div>
           </div>   
+          <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="security_question" class="form-label">Security Question</label>
+                    <select class="form-select" id="security_question" name="security_question" required>
+                        <option selected disabled>Select a security question</option>
+                        <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                        <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                        <option value="What was the name of the street you grew up on?">What was the name of the street you grew up on?</option>
+                        <option value="What is your favorite book?">What is your favorite book?</option>
+                        <option value="What was the name of your elementary school?">What was the name of your elementary school?</option>
+                        <option value="What is the name of your best childhood friend?">What is the name of your best childhood friend?</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select a security question.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="security_question_answer" class="form-label">Answer</label>
+                    <input type="text" class="form-control" id="security_question_answer" name="security_question_answer" required autocomplete="off" />
+                    <div class="invalid-feedback">
+                        Please fill in your answer.
+                    </div>
+                </div>
+            </div>
+        </div>
           <div class="text-center">
             <button style="width:100%" type="submit" class="btn btn-primary mt-4 mb-4">Register</button>
           </div>
