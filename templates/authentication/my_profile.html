@@ -35,6 +35,8 @@
             <p><strong>Location:</strong> {{ user.location }}</p>
             <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
             <p><strong>Interests:</strong> {{ user.interests }}</p>
+            <a href="{% url 'events:add_interest' %}" class="btn btn-success">Add Interest</a>
+            
             <hr>
             
             <!-- Security Question -->
