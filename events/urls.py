@@ -7,5 +7,6 @@ from django.conf.urls.static import static
 app_name = "events"
 
 urlpatterns = [
-    path("add_interests",views.add_interest,name="add_interest")
+    path("add_interests",views.add_interest,name="add_interest"),
+    path("my_events",views.my_events,name="my_events")
 ]

@@ -5,7 +5,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4 text-center">
-            {% if user.profile_picture.url %}
+            {% if user.profile_picture and user.profile_picture.url %}
                 <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
             {% else %}
                 <img src="{% static 'img/default_profile_picture.png' %}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
