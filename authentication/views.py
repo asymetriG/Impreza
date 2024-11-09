@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import User as CustomUserModel 
+from .models import Profile
 from django.contrib.auth import authenticate,logout
 from django.contrib.auth import login as django_login
 from hashlib import sha256
@@ -49,11 +49,8 @@ def register(request):
             last_name=surname
         )
         
-        custom_user = CustomUserModel(
-            username=username,
-            email=email,
-            first_name=name,
-            last_name=surname,
+        custom_user = Profile(
+            user=user,
             birth_date=birth_date,
             gender=gender,
             location=location,
@@ -101,7 +98,8 @@ def forgot_password(request):
     if request.method == "POST":
 
         username = request.POST.get("username")
-        user = CustomUserModel.objects.filter(username=username).first()
+        
+        user = User.objects.filter(username=username).first()
         
         if not user:
             messages.error(request, "Username not found.")
@@ -143,7 +141,7 @@ def forgot_password(request):
 @login_required
 def my_profile(request):
     
-    user = CustomUserModel.objects.get(username=request.user.username)
+    user = User.objects.get(username=request.user.username)
     
     return render(request, "authentication/my_profile.html", {"user": user})
 
@@ -151,8 +149,8 @@ def my_profile(request):
 def change_profile_picture(request):
     if request.method == 'POST' and request.FILES.get('profile_picture'):
         profile_picture = request.FILES['profile_picture']
-        user = CustomUserModel.objects.get(username=request.user.username)
-        user.profile_picture = profile_picture
+        user = User.objects.get(username=request.user.username)
+        user.profile.profile_picture = profile_picture
         user.save()
         messages.success(request, "Profile picture updated successfully!")
     else:

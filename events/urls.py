@@ -8,5 +8,6 @@ app_name = "events"
 
 urlpatterns = [
     path("add_interests",views.add_interest,name="add_interest"),
-    path("my_events",views.my_events,name="my_events")
+    path("my_events",views.my_events,name="my_events"),
+    path("event_create",views.event_create,name="event_create")
 ]

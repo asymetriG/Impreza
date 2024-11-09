@@ -5,13 +5,12 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4 text-center">
-            {% if user.profile_picture and user.profile_picture.url %}
+            {% if user.profile.profile_picture and user.profile.profile_picture.url %}
                 <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
             {% else %}
                 <img src="{% static 'img/default_profile_picture.png' %}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
             {% endif %}
 
-            <!-- Form to Change Profile Picture -->
             <form method="POST" enctype="multipart/form-data" action="{% url 'authentication:change_profile_picture' %}">
                 {% csrf_token %}
                 <div class="form-group">
@@ -23,25 +22,25 @@
             </form>
         </div>
         <div class="col-md-8">
-            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-            <p class="text-muted">{{ user.username }}</p>
+            <h2>{{ user.profile.first_name }} {{ user.profile.last_name }}</h2>
+            <p class="text-muted">{{ user.profile.username }}</p>
             <hr>
             
             <!-- Personal Details -->
             <h4>Personal Details</h4>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Birth Date:</strong> {{ user.birth_date|date:"F d, Y" }}</p>
-            <p><strong>Gender:</strong> {{ user.gender }}</p>
-            <p><strong>Location:</strong> {{ user.location }}</p>
-            <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
-            <p><strong>Interests:</strong> {{ user.interests }}</p>
+            <p><strong>Email:</strong> {{ user.profile.email }}</p>
+            <p><strong>Birth Date:</strong> {{ user.profile.birth_date|date:"F d, Y" }}</p>
+            <p><strong>Gender:</strong> {{ user.profile.gender }}</p>
+            <p><strong>Location:</strong> {{ user.profile.location }}</p>
+            <p><strong>Phone Number:</strong> {{ user.profile.phone_number }}</p>
+            <p><strong>Interests:</strong> {{ user.profile.interests }}</p>
             <a href="{% url 'events:add_interest' %}" class="btn btn-success">Add Interest</a>
             
             <hr>
             
             <!-- Security Question -->
             <h4>Security Information</h4>
-            <p><strong>Security Question:</strong> {{ user.security_question }}</p>
+            <p><strong>Security Question:</strong> {{ user.profile.security_question }}</p>
         </div>
     </div>
 </div>

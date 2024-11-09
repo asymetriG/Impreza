@@ -1,0 +1,65 @@
+{% extends "utils/layout.html" %}
+{% load static %}
+
+
+{% block body %}
+<h2>Create Event</h2>
+<hr><br>
+<form method="post" action="{% url 'events:event_create' %}">
+    {% csrf_token %}
+    
+
+    <div class="form-group">
+        <label for="event_name">Event Name</label>
+        <input type="text" id="event_name" name="event_name" class="form-control" maxlength="60">
+    </div>
+    
+    <br>
+
+    <div class="form-group">
+        <label for="event_description">Event Description</label>
+        <textarea id="event_description" name="event_description" class="form-control" rows="4"></textarea>
+    </div>
+    
+    <br>
+
+    <div class="form-group">
+        <label for="event_date">Event Date</label>
+        <input type="date" id="event_date" name="event_date" class="form-control">
+    </div>
+    
+    <br>
+
+    <div class="form-group">
+        <label for="event_time">Event Time</label>
+        <input type="time" id="event_time" name="event_time" class="form-control">
+    </div>
+    
+    <br>
+
+    <div class="form-group">
+        <label for="event_duration">Event Duration (hours)</label>
+        <input type="number" id="event_duration" name="event_duration" class="form-control" step="0.1">
+    </div>
+    
+    <br>
+
+    <div class="form-group">
+        <label for="event_location">Event Location</label>
+        <input type="text" id="event_location" name="event_location" class="form-control" maxlength="60">
+    </div>
+    
+    <br>
+
+    <div class="form-group">
+        <label for="event_category">Event Category</label>
+        <input type="text" id="event_category" name="event_category" class="form-control" maxlength="60">
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Event</button>
+    <br>
+</form>
+{% endblock body %}
+    
