@@ -7,7 +7,19 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
+def set_interests(request):
+    if request.method=="POST":
+        
+        selected_interests = request.POST.getlist('interests')
+        
+        if selected_interests:
+            request.user.profile.interests = ', '.join(selected_interests)
+            request.user.profile.save()
+            messages.success(request, "Interests updated successfully!")
 
+        return redirect('events:my_profile')
+
+    return render(request, 'events/my_profile.html')
 
 def my_events(request):
     events = Event.objects.filter(event_owner=request.user)
