@@ -12,7 +12,6 @@ urlpatterns = [
     path("login",views.login,name="login"),
     path('logout', views.logout_view, name='logout'),
     path("forgot_password",views.forgot_password,name="forgot_password"),
-    path("my_profile",views.my_profile,name="my_profile"),
     path('change_profile_picture', views.change_profile_picture, name='change_profile_picture'),
 
 ]

@@ -2,18 +2,24 @@ from django.shortcuts import render,redirect
 from .models import Event
 from django.contrib.auth.models import User
 from authentication.models import User as CustomUserModel
+from authentication.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-def add_interest(request):
-    return render(request,"events/add_interests.html")
 
 
 def my_events(request):
     events = Event.objects.filter(event_owner=request.user)
     return render(request, 'events/my_events.html', {'events': events})
 
+
+@login_required
+def my_profile(request):
+    
+    user = User.objects.get(username=request.user.username)
+    
+    return render(request, "events/my_profile.html", {"user": user})
 
 @login_required
 def create_event(request):
