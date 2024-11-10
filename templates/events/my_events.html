@@ -1,8 +1,32 @@
 {% extends "utils/layout.html" %}
 {% load static %}
 
-
 {% block body %}
-    <a href="{% url 'events:event_create'%}" class="btn btn-info">Add Event...</a>
+    <a href="{% url 'events:create_event'%}" class="btn btn-info mb-4">Add Event...</a>
+
+    <div class="row">
+        {% for event in events %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if event.event_image %}
+                        <img src="{{ event.event_image.url }}" class="card-img-top" alt="{{ event.event_name }}">
+                    {% else %}
+                        <img src="{% static 'event_images/select_image.png' %}" class="card-img-top" alt="Event Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.event_name }}</h5>
+                        <p class="card-text">{{ event.event_description|truncatewords:20 }}</p>
+                        <p class="card-text">
+                            <strong>Location:</strong> {{ event.event_location }} <br>
+                            <strong>Date:</strong> {{ event.event_date|date:"M d, Y" }} <br>
+                            <strong>Time:</strong> {{ event.event_time }}
+                        </p>
+                        <a href="#" class="btn btn-primary">View Event</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No events available.</p>
+        {% endfor %}
+    </div>
 {% endblock body %}
-    

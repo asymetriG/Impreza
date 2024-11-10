@@ -14,8 +14,6 @@ class Profile(models.Model):
     security_question_answer = models.CharField(max_length=60, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
     
-    
-
     def __str__(self):
         return self.username
     

@@ -1,65 +1,86 @@
 {% extends "utils/layout.html" %}
 {% load static %}
 
-
 {% block body %}
 <h2>Create Event</h2>
 <hr><br>
-<form method="post" action="{% url 'events:event_create' %}">
+<form method="post" action="{% url 'events:create_event' %}" enctype="multipart/form-data">
     {% csrf_token %}
-    
 
-    <div class="form-group">
-        <label for="event_name">Event Name</label>
-        <input type="text" id="event_name" name="event_name" class="form-control" maxlength="60">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="event_name">Event Name</label>
+                <input type="text" id="event_name" name="event_name" class="form-control" maxlength="60" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="event_date">Event Date</label>
+                <input type="date" id="event_date" name="event_date" class="form-control" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="event_time">Event Time</label>
+                <input type="time" id="event_time" name="event_time" class="form-control" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="event_duration">Event Duration (hours)</label>
+                <input type="number" id="event_duration" name="event_duration" class="form-control" step="0.1" required>
+            </div>
+            <br>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div>
+                    <!-- Placeholder image with click event -->
+                    <img 
+                        src="{% static 'img/select_image.png' %}" 
+                        alt="Select Image" 
+                        id="image_placeholder" 
+                        style="width: 100%; height:300px ;  cursor: pointer;"
+                        onclick="document.getElementById('event_image').click();" 
+                    />
+                    <!-- Hidden file input -->
+                    <input 
+                        type="file" 
+                        id="event_image" 
+                        name="event_image" 
+                        class="d-none" 
+                        accept="image/*"
+                        onchange="updatePlaceholderImage(this);" 
+                    >
+                </div>
+            </div>
+        </div>
     </div>
-    
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="event_location">Event Location</label>
+                <input type="text" id="event_location" name="event_location" class="form-control" maxlength="60" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="event_category">Event Category</label>
+                <input type="text" id="event_category" name="event_category" class="form-control" maxlength="60" required>
+            </div>
+        </div>
+    </div>
     <br>
 
-    <div class="form-group">
-        <label for="event_description">Event Description</label>
-        <textarea id="event_description" name="event_description" class="form-control" rows="4"></textarea>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="event_description">Event Description</label>
+                <textarea id="event_description" name="event_description" class="form-control" rows="4"></textarea>
+            </div>
+        </div>
     </div>
-    
-    <br>
-
-    <div class="form-group">
-        <label for="event_date">Event Date</label>
-        <input type="date" id="event_date" name="event_date" class="form-control">
-    </div>
-    
-    <br>
-
-    <div class="form-group">
-        <label for="event_time">Event Time</label>
-        <input type="time" id="event_time" name="event_time" class="form-control">
-    </div>
-    
-    <br>
-
-    <div class="form-group">
-        <label for="event_duration">Event Duration (hours)</label>
-        <input type="number" id="event_duration" name="event_duration" class="form-control" step="0.1">
-    </div>
-    
-    <br>
-
-    <div class="form-group">
-        <label for="event_location">Event Location</label>
-        <input type="text" id="event_location" name="event_location" class="form-control" maxlength="60">
-    </div>
-    
-    <br>
-
-    <div class="form-group">
-        <label for="event_category">Event Category</label>
-        <input type="text" id="event_category" name="event_category" class="form-control" maxlength="60">
-    </div>
-
     <br>
 
     <button type="submit" class="btn btn-primary" style="width: 100%;">Save Event</button>
-    <br>
 </form>
 {% endblock body %}
-    
