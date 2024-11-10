@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-4 text-center">
             {% if user.profile.profile_picture and user.profile.profile_picture.url %}
-                <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
+                <img src="{{ user.profile.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
             {% else %}
                 <img src="{% static 'img/default_profile_picture.png' %}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 150px; height: 150px;">
             {% endif %}
@@ -22,26 +22,214 @@
             </form>
         </div>
         <div class="col-md-8">
-            <h2>{{ user.profile.first_name }} {{ user.profile.last_name }}</h2>
-            <p class="text-muted">{{ user.profile.username }}</p>
+            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+            <p class="text-muted">{{ user.username }}</p>
             <hr>
-            
-            <!-- Personal Details -->
+
             <h4>Personal Details</h4>
-            <p><strong>Email:</strong> {{ user.profile.email }}</p>
-            <p><strong>Birth Date:</strong> {{ user.profile.birth_date|date:"F d, Y" }}</p>
-            <p><strong>Gender:</strong> {{ user.profile.gender }}</p>
-            <p><strong>Location:</strong> {{ user.profile.location }}</p>
-            <p><strong>Phone Number:</strong> {{ user.profile.phone_number }}</p>
-            <p><strong>Interests:</strong> {{ user.profile.interests }}</p>
-            <a href="{% url 'events:add_interest' %}" class="btn btn-success">Add Interest</a>
-            
-            <hr>
-            
-            <!-- Security Question -->
-            <h4>Security Information</h4>
-            <p><strong>Security Question:</strong> {{ user.profile.security_question }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Birth Date: {{user.profile.birth_date}} </strong></p>
+            <p><strong>Interests:</strong> {{ user.interests }}</p>
+
+            <!-- Saydam Add Interest Butonu ve Aşağıya Doğru Açılan Dropdown -->
+            <div class="dropdown">
+                <button id="interestButton" class="btn btn-success dropdown-toggle" type="button" aria-expanded="false">
+                    Add Interest
+                </button>
+                <div id="interestDropdown" class="dropdown-menu p-3 slide-down" style="min-width: 300px; display: none; overflow: hidden;">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest1" name="interest1" class="form-check-input">
+                                <label for="interest1" class="form-check-label">Football</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest2" name="interest2" class="form-check-input">
+                                <label for="interest2" class="form-check-label">Basketball</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest3" name="interest3" class="form-check-input">
+                                <label for="interest3" class="form-check-label">Volleyball</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest4" name="interest4" class="form-check-input">
+                                <label for="interest4" class="form-check-label">Chess</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest5" name="interest5" class="form-check-input">
+                                <label for="interest5" class="form-check-label">Art</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest6" name="interest6" class="form-check-input">
+                                <label for="interest6" class="form-check-label">Books</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest7" name="interest7" class="form-check-input">
+                                <label for="interest7" class="form-check-label">Cooking</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest8" name="interest8" class="form-check-input">
+                                <label for="interest8" class="form-check-label">Movies</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest9" name="interest9" class="form-check-input">
+                                <label for="interest9" class="form-check-label">Music</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest10" name="interest10" class="form-check-input">
+                                <label for="interest10" class="form-check-label">Travel</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest11" name="interest11" class="form-check-input">
+                                <label for="interest11" class="form-check-label">Photography</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest12" name="interest12" class="form-check-input">
+                                <label for="interest12" class="form-check-label">Science</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest13" name="interest13" class="form-check-input">
+                                <label for="interest13" class="form-check-label">Technology</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest14" name="interest14" class="form-check-input">
+                                <label for="interest14" class="form-check-label">Gaming</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest15" name="interest15" class="form-check-input">
+                                <label for="interest15" class="form-check-label">Fitness</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest16" name="interest16" class="form-check-input">
+                                <label for="interest16" class="form-check-label">Yoga</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest17" name="interest17" class="form-check-input">
+                                <label for="interest17" class="form-check-label">Dance</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest18" name="interest18" class="form-check-input">
+                                <label for="interest18" class="form-check-label">Hiking</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest19" name="interest19" class="form-check-input">
+                                <label for="interest19" class="form-check-label">Cycling</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest20" name="interest20" class="form-check-input">
+                                <label for="interest20" class="form-check-label">Gardening</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest21" name="interest21" class="form-check-input">
+                                <label for="interest21" class="form-check-label">Fishing</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest22" name="interest22" class="form-check-input">
+                                <label for="interest22" class="form-check-label">Swimming</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest23" name="interest23" class="form-check-input">
+                                <label for="interest23" class="form-check-label">Surfing</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest24" name="interest24" class="form-check-input">
+                                <label for="interest24" class="form-check-label">Running</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest25" name="interest25" class="form-check-input">
+                                <label for="interest25" class="form-check-label">Painting</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest26" name="interest26" class="form-check-input">
+                                <label for="interest26" class="form-check-label">Writing</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest27" name="interest27" class="form-check-input">
+                                <label for="interest27" class="form-check-label">Poetry</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest28" name="interest28" class="form-check-input">
+                                <label for="interest28" class="form-check-label">History</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest29" name="interest29" class="form-check-input">
+                                <label for="interest29" class="form-check-label">Philosophy</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="interest30" name="interest30" class="form-check-input">
+                                <label for="interest30" class="form-check-label">Psychology</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-2">
+                            <button type="submit" class="btn btn-primary btn-sm">Save Interests</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- CSS -->
+<style>
+    #interestButton {
+        opacity: 0.8;
+        transition: opacity 0.3s;
+    }
+
+    #interestButton:hover {
+        opacity: 1;
+    }
+
+    .slide-down {
+        animation: slideDown 0.5s ease forwards;
+    }
+
+    .slide-up {
+        animation: slideUp 0.5s ease forwards;
+    }
+
+    @keyframes slideDown {
+        from {
+            max-height: 0;
+            opacity: 0;
+        }
+        to {
+            max-height: 500px;
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            max-height: 500px;
+            opacity: 1;
+        }
+        to {
+            max-height: 0;
+            opacity: 0;
+        }
+    }
+</style>
+
+<!-- JavaScript -->
+<script>
+    const interestButton = document.getElementById('interestButton');
+    const interestDropdown = document.getElementById('interestDropdown');
+
+    interestButton.addEventListener('click', () => {
+        if (interestDropdown.style.display === 'none' || interestDropdown.classList.contains('slide-up')) {
+            interestDropdown.style.display = 'block';
+            interestDropdown.classList.remove('slide-up');
+            interestDropdown.classList.add('slide-down');
+        } else {
+            interestDropdown.classList.remove('slide-down');
+            interestDropdown.classList.add('slide-up');
+            setTimeout(() => {
+                interestDropdown.style.display = 'none';
+            }, 500);
+        }
+    });
+</script>
 {% endblock body %}
