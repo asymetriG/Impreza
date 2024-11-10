@@ -150,10 +150,10 @@ def change_profile_picture(request):
     if request.method == 'POST' and request.FILES.get('profile_picture'):
         profile_picture = request.FILES['profile_picture']
 
-        user = User.objects.get(username=request.user.username)
-        user.profile.profile_picture = profile_picture
-        user.save()
-        print(user.profile.profile_picture)
+        profile = Profile.objects.get(user=request.user)
+        profile.profile_picture = profile_picture
+        profile.save()
+        
         messages.success(request, "Profile picture updated successfully!")
     else:
         messages.error(request, "Please select a valid image file.")

@@ -29,9 +29,13 @@
             <h4>Personal Details</h4>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Birth Date: {{user.profile.birth_date}} </strong></p>
+            <p><strong>Location: {{user.profile.location}}</strong></p>
+            <p><strong>Phone Number: {{user.profile.phone_number}}</strong></p>
+            <p><strong>Gender: {{user.profile.gender}}</strong></p>
             <p><strong>Interests:</strong> {{ user.interests }}</p>
+            <p><strong>Security Question: {{user.profile.security_question}} == {{user.profile.security_question_answer}} </strong></p>
 
-            <!-- Saydam Add Interest Butonu ve Aşağıya Doğru Açılan Dropdown -->
+
             <div class="dropdown">
                 <button id="interestButton" class="btn btn-success dropdown-toggle" type="button" aria-expanded="false">
                     Add Interest
