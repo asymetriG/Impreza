@@ -37,9 +37,10 @@
 
 
             <div class="dropdown">
-                <button id="interestButton" class="btn btn-success dropdown-toggle" type="button" aria-expanded="false">
+                <button id="interestButton" class="btn btn-success dropdown-toggle mb-3" type="button" aria-expanded="false">
                     Edit Interest
                 </button>
+                
                 <div id="interestDropdown" class="dropdown-menu p-3 slide-down" style="min-width: 300px; display: none; overflow: hidden;">
                     <form method="post" action="{% url 'events:set_interests' %}">
                         {% csrf_token %}
@@ -202,6 +203,7 @@
                         </div>
                     </form>
                 </div>
+                <br>
             </div>
         </div>
     </div>
