@@ -1,0 +1,351 @@
+{% extends "../utils/layout.html" %} 
+{% load static %}
+
+
+
+{% block body %}
+<h3 class="text-center">Edit Profile</h3>
+<hr />
+  <div class="row">
+      <div class="col-md-12">
+        <form method="post" class="needs-validation" novalidate>
+          {% csrf_token %}
+          <div class="row">
+            <div class="mb-3 col-md-6">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" value="{{ profile.user.first_name }}" required autocomplete="off"/>              <div class="invalid-feedback">
+                Please fill this area.
+              </div>
+
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="surname" class="form-label">Surname</label>
+              <input type="text" class="form-control" id="surname" name="surname" value="{{ profile.user.last_name }}" required autocomplete="off"/>
+              <div class="invalid-feedback">
+                Please fill this area.
+              </div>
+            </div>
+          </div>
+          
+          
+          <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{user.username}}" disabled autocomplete="off"/>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" required autocomplete="off"/>
+              </div>
+            </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="birthdate" class="form-label">Birth Date</label>
+                <input
+                class="date-input form-control"
+                type="date"
+                id="birthdate"
+                name="birthdate"
+                value="{{ profile.birth_date|date:'Y-m-d'}}"
+                required
+                autocomplete="off"
+                />
+                <div class="invalid-feedback">
+                    Please fill this area.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender">
+                    <option value="male" {% if profile.gender == "male" %}selected{% endif %}>Male</option>
+                    <option value="female" {% if profile.gender == "female" %}selected{% endif %}>Female</option>
+                    <option value="nonbinary" {% if profile.gender == "nonbinary" %}selected{% endif %}>Non-Binary</option>
+                    <option value="transgender" {% if profile.gender == "transgender" %}selected{% endif %}>Transgender</option>
+                    <option value="attackhelicopter" {% if profile.gender == "attackhelicopter" %}selected{% endif %}>Attack Helicopter</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <select class="form-select" id="location" name="location">
+                    <option value="istanbul" selected>Istanbul</option>
+                    <option value="izmir">İzmir</option>
+                  </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" id="phone" name="phone" value="{{ profile.phone_number }}" required autocomplete="off"/>
+                <div class="invalid-feedback">
+                 Please fill this area.
+                </div>
+              </div>
+            </div>
+          </div>   
+          <div class="row">
+            <div class="dropdown">
+                <div class="text-center">
+                    <button type="submit" style="width: 100%;" class="btn btn-primary mt-4 mb-4">Save Changes</button>
+                </div>
+                <button id="interestButton" class="btn btn-success dropdown-toggle mb-3" type="button" aria-expanded="false">
+                    Edit Interest
+                </button>
+                
+                <div id="interestDropdown" class="dropdown-menu p-3 slide-down" style="min-width: 300px; display: none; overflow: hidden;">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Football" name="interests" value="Football" class="form-check-input" 
+                                    {% if 'Football' in user.profile.interests %}checked{% endif %}>
+                                <label for="Football" class="form-check-label">Football</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Basketball" name="interests" value="Basketball" class="form-check-input" 
+                                    {% if 'Basketball' in user.profile.interests %}checked{% endif %}>
+                                <label for="Basketball" class="form-check-label">Basketball</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Volleyball" name="interests" value="Volleyball" class="form-check-input" 
+                                    {% if 'Volleyball' in user.profile.interests %}checked{% endif %}>
+                                <label for="Volleyball" class="form-check-label">Volleyball</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Chess" name="interests" value="Chess" class="form-check-input" 
+                                    {% if 'Chess' in user.profile.interests %}checked{% endif %}>
+                                <label for="Chess" class="form-check-label">Chess</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Art" name="interests" value="Art" class="form-check-input" 
+                                    {% if 'Art' in user.profile.interests %}checked{% endif %}>
+                                <label for="Art" class="form-check-label">Art</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Books" name="interests" value="Books" class="form-check-input" 
+                                    {% if 'Books' in user.profile.interests %}checked{% endif %}>
+                                <label for="Books" class="form-check-label">Books</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Cooking" name="interests" value="Cooking" class="form-check-input" 
+                                    {% if 'Cooking' in user.profile.interests %}checked{% endif %}>
+                                <label for="Cooking" class="form-check-label">Cooking</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Movies" name="interests" value="Movies" class="form-check-input" 
+                                    {% if 'Movies' in user.profile.interests %}checked{% endif %}>
+                                <label for="Movies" class="form-check-label">Movies</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Music" name="interests" value="Music" class="form-check-input" 
+                                    {% if 'Music' in user.profile.interests %}checked{% endif %}>
+                                <label for="Music" class="form-check-label">Music</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Travel" name="interests" value="Travel" class="form-check-input" 
+                                    {% if 'Travel' in user.profile.interests %}checked{% endif %}>
+                                <label for="Travel" class="form-check-label">Travel</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Photography" name="interests" value="Photography" class="form-check-input" 
+                                    {% if 'Photography' in user.profile.interests %}checked{% endif %}>
+                                <label for="Photography" class="form-check-label">Photography</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Science" name="interests" value="Science" class="form-check-input" 
+                                    {% if 'Science' in user.profile.interests %}checked{% endif %}>
+                                <label for="Science" class="form-check-label">Science</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Technology" name="interests" value="Technology" class="form-check-input" 
+                                    {% if 'Technology' in user.profile.interests %}checked{% endif %}>
+                                <label for="Technology" class="form-check-label">Technology</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Gaming" name="interests" value="Gaming" class="form-check-input" 
+                                    {% if 'Gaming' in user.profile.interests %}checked{% endif %}>
+                                <label for="Gaming" class="form-check-label">Gaming</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Fitness" name="interests" value="Fitness" class="form-check-input" 
+                                    {% if 'Fitness' in user.profile.interests %}checked{% endif %}>
+                                <label for="Fitness" class="form-check-label">Fitness</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Yoga" name="interests" value="Yoga" class="form-check-input" 
+                                    {% if 'Yoga' in user.profile.interests %}checked{% endif %}>
+                                <label for="Yoga" class="form-check-label">Yoga</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Dance" name="interests" value="Dance" class="form-check-input" 
+                                    {% if 'Dance' in user.profile.interests %}checked{% endif %}>
+                                <label for="Dance" class="form-check-label">Dance</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Hiking" name="interests" value="Hiking" class="form-check-input" 
+                                    {% if 'Hiking' in user.profile.interests %}checked{% endif %}>
+                                <label for="Hiking" class="form-check-label">Hiking</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Cycling" name="interests" value="Cycling" class="form-check-input" 
+                                    {% if 'Cycling' in user.profile.interests %}checked{% endif %}>
+                                <label for="Cycling" class="form-check-label">Cycling</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Gardening" name="interests" value="Gardening" class="form-check-input" 
+                                    {% if 'Gardening' in user.profile.interests %}checked{% endif %}>
+                                <label for="Gardening" class="form-check-label">Gardening</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Fishing" name="interests" value="Fishing" class="form-check-input" 
+                                    {% if 'Fishing' in user.profile.interests %}checked{% endif %}>
+                                <label for="Fishing" class="form-check-label">Fishing</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Swimming" name="interests" value="Swimming" class="form-check-input" 
+                                    {% if 'Swimming' in user.profile.interests %}checked{% endif %}>
+                                <label for="Swimming" class="form-check-label">Swimming</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Surfing" name="interests" value="Surfing" class="form-check-input" 
+                                    {% if 'Surfing' in user.profile.interests %}checked{% endif %}>
+                                <label for="Surfing" class="form-check-label">Surfing</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Running" name="interests" value="Running" class="form-check-input" 
+                                    {% if 'Running' in user.profile.interests %}checked{% endif %}>
+                                <label for="Running" class="form-check-label">Running</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Painting" name="interests" value="Painting" class="form-check-input" 
+                                    {% if 'Painting' in user.profile.interests %}checked{% endif %}>
+                                <label for="Painting" class="form-check-label">Painting</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Writing" name="interests" value="Writing" class="form-check-input" 
+                                    {% if 'Writing' in user.profile.interests %}checked{% endif %}>
+                                <label for="Writing" class="form-check-label">Writing</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Poetry" name="interests" value="Poetry" class="form-check-input" 
+                                    {% if 'Poetry' in user.profile.interests %}checked{% endif %}>
+                                <label for="Poetry" class="form-check-label">Poetry</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="History" name="interests" value="History" class="form-check-input" 
+                                    {% if 'History' in user.profile.interests %}checked{% endif %}>
+                                <label for="History" class="form-check-label">History</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Philosophy" name="interests" value="Philosophy" class="form-check-input" 
+                                    {% if 'Philosophy' in user.profile.interests %}checked{% endif %}>
+                                <label for="Philosophy" class="form-check-label">Philosophy</label>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="checkbox" id="Psychology" name="interests" value="Psychology" class="form-check-input" 
+                                    {% if 'Psychology' in user.profile.interests %}checked{% endif %}>
+                                <label for="Psychology" class="form-check-label">Psychology</label>
+                            </div>
+                        </div>
+                    
+                </div>
+                <br>
+            </div>
+          </div>
+          
+          
+            
+        </form>
+      </div>
+    </div>
+
+
+    <style>
+        #interestButton {
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+    
+        #interestButton:hover {
+            opacity: 1;
+        }
+    
+        .slide-down {
+            animation: slideDown 0.5s ease forwards;
+        }
+    
+        .slide-up {
+            animation: slideUp 0.5s ease forwards;
+        }
+    
+        @keyframes slideDown {
+            from {
+                max-height: 0;
+                opacity: 0;
+            }
+            to {
+                max-height: 500px;
+                opacity: 1;
+            }
+        }
+    
+        @keyframes slideUp {
+            from {
+                max-height: 500px;
+                opacity: 1;
+            }
+            to {
+                max-height: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+     
+    
+    
+{% endblock body %}
+
+{% block script %}
+<script>
+    const interestButton = document.getElementById('interestButton');
+    const interestDropdown = document.getElementById('interestDropdown');
+
+    interestButton.addEventListener('click', () => {
+        if (interestDropdown.style.display === 'none' || interestDropdown.classList.contains('slide-up')) {
+            interestDropdown.style.display = 'block';
+            interestDropdown.classList.remove('slide-up');
+            interestDropdown.classList.add('slide-down');
+        } else {
+            interestDropdown.classList.remove('slide-down');
+            interestDropdown.classList.add('slide-up');
+            setTimeout(() => {
+                interestDropdown.style.display = 'none';
+            }, 500);
+        }
+    });
+</script>
+<script>
+  (() => {
+    'use strict'
+  
+    const forms = document.querySelectorAll('.needs-validation')
+
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+  
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
+{% endblock script %}
+

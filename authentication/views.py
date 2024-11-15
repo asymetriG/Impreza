@@ -94,6 +94,7 @@ def login(request):
         
         return render(request,"authentication/login.html")
     
+    
 def forgot_password(request):
     if request.method == "POST":
 
@@ -164,4 +165,29 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have successfully logged out.")
     return redirect('index') 
+
+
+@login_required
+def edit_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == "POST":
+        profile.birth_date = request.POST.get('birthdate')
+        profile.location = request.POST.get('location')
+        profile.phone_number = request.POST.get('phone')
+        profile.gender = request.POST.get('gender')
+
+        
+        selected_interests = request.POST.getlist('interests')
+        
+        if selected_interests:
+            profile.interests = ', '.join(selected_interests)
+            profile.save()
+        
+        profile.save()
+        
+        messages.success(request, "Your profile has been updated successfully")
+        
+        return redirect('events:my_profile')  
+    return render(request, "events/edit_profile.html", {"profile": profile})
 

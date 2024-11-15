@@ -1,86 +1,154 @@
-{% extends "utils/layout.html" %}
-{% load static %}
-
-{% block body %}
+{% extends "utils/layout.html" %} {% load static %} {% block body %}
 <h2>Create Event</h2>
-<hr><br>
-<form method="post" action="{% url 'events:create_event' %}" enctype="multipart/form-data">
-    {% csrf_token %}
+<hr />
+<br />
+<form
+  method="post"
+  action="{% url 'events:create_event' %}"
+  enctype="multipart/form-data"
+>
+  {% csrf_token %}
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="event_name">Event Name</label>
-                <input type="text" id="event_name" name="event_name" class="form-control" maxlength="60" required>
-            </div>
-            <br>
-            <div class="form-group">
-                <label for="event_date">Event Date</label>
-                <input type="date" id="event_date" name="event_date" class="form-control" required>
-            </div>
-            <br>
-            <div class="form-group">
-                <label for="event_time">Event Time</label>
-                <input type="time" id="event_time" name="event_time" class="form-control" required>
-            </div>
-            <br>
-            <div class="form-group">
-                <label for="event_duration">Event Duration (hours)</label>
-                <input type="number" id="event_duration" name="event_duration" class="form-control" step="0.1" required>
-            </div>
-            <br>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <div>
-                    <!-- Placeholder image with click event -->
-                    <img 
-                        src="{% static 'img/select_image.png' %}" 
-                        alt="Select Image" 
-                        id="image_placeholder" 
-                        style="width: 100%; height:300px ;  cursor: pointer;"
-                        onclick="document.getElementById('event_image').click();" 
-                    />
-                    <!-- Hidden file input -->
-                    <input 
-                        type="file" 
-                        id="event_image" 
-                        name="event_image" 
-                        class="d-none" 
-                        accept="image/*"
-                        onchange="updatePlaceholderImage(this);" 
-                    >
-                </div>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="event_name">Event Name</label>
+        <input
+          type="text"
+          id="event_name"
+          name="event_name"
+          class="form-control"
+          maxlength="60"
+          required
+        />
+      </div>
+      <br />
+      <div class="form-group">
+        <label for="event_date">Event Date</label>
+        <input
+          type="date"
+          id="event_date"
+          name="event_date"
+          class="form-control"
+          required
+        />
+      </div>
+      <br />
+      <div class="form-group">
+        <label for="event_time">Event Time</label>
+        <input
+          type="time"
+          id="event_time"
+          name="event_time"
+          class="form-control"
+          required
+        />
+      </div>
+      <br />
+      <div class="form-group">
+        <label for="event_duration">Event Duration (hours)</label>
+        <input
+          type="number"
+          id="event_duration"
+          name="event_duration"
+          class="form-control"
+          step="0.1"
+          required
+        />
+      </div>
+      <br />
     </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="event_location">Event Location</label>
-                <input type="text" id="event_location" name="event_location" class="form-control" maxlength="60" required>
-            </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <div>
+          <!-- Placeholder image with click event -->
+          <img
+            src="{% static 'img/select_image.png' %}"
+            alt="Select Image"
+            id="image_placeholder"
+            style="width: 100%; height: 300px; cursor: pointer"
+            onclick="document.getElementById('event_image').click();"
+          />
+          <!-- Hidden file input -->
+          <input
+            type="file"
+            id="event_image"
+            name="event_image"
+            class="d-none"
+            accept="image/*"
+            onchange="updatePlaceholderImage(this);"
+          />
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="event_category">Event Category</label>
-                <input type="text" id="event_category" name="event_category" class="form-control" maxlength="60" required>
-            </div>
-        </div>
+      </div>
     </div>
-    <br>
+  </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="event_description">Event Description</label>
-                <textarea id="event_description" name="event_description" class="form-control" rows="4"></textarea>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="location" class="form-label">Location</label>
+        <select name="location" id="location" class="form-select">
+          <option value="Istanbul">Istanbul</option>
+        </select>
+      </div>
     </div>
-    <br>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="interests" class="form-label">Interests</label>
+        <select id="interests" name="interests" class="form-select">
+          <option value="Football">Football</option>
+          <option value="Basketball">Basketball</option>
+          <option value="Volleyball">Volleyball</option>
+          <option value="Chess">Chess</option>
+          <option value="Art">Art</option>
+          <option value="Books">Books</option>
+          <option value="Cooking">Cooking</option>
+          <option value="Movies">Movies</option>
+          <option value="Music">Music</option>
+          <option value="Travel">Travel</option>
+          <option value="Photography">Photography</option>
+          <option value="Science">Science</option>
+          <option value="Technology">Technology</option>
+          <option value="Gaming">Gaming</option>
+          <option value="Fitness">Fitness</option>
+          <option value="Yoga">Yoga</option>
+          <option value="Dance">Dance</option>
+          <option value="Hiking">Hiking</option>
+          <option value="Cycling">Cycling</option>
+          <option value="Gardening">Gardening</option>
+          <option value="Fishing">Fishing</option>
+          <option value="Swimming">Swimming</option>
+          <option value="Surfing">Surfing</option>
+          <option value="Running">Running</option>
+          <option value="Painting">Painting</option>
+          <option value="Writing">Writing</option>
+          <option value="Poetry">Poetry</option>
+          <option value="History">History</option>
+          <option value="Philosophy">Philosophy</option>
+          <option value="Psychology">Psychology</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <br />
 
-    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Event</button>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="event_description">Event Description</label>
+        <textarea
+          id="event_description"
+          name="event_description"
+          class="form-control"
+          rows="4"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <button type="submit" class="btn btn-primary" style="width: 100%">
+    Save Event
+  </button>
 </form>
 {% endblock body %}
