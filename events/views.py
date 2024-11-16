@@ -29,7 +29,7 @@ def create_event(request):
         event_time = request.POST.get('event_time')
         event_duration = request.POST.get('event_duration')
         event_location = request.POST.get('event_location')
-        event_category = request.POST.get('event_category')
+        event_category = request.POST.get('interests')
         event_description = request.POST.get('event_description')
         event_image = request.FILES.get('event_image')
         

@@ -9,7 +9,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card h-100"> 
                     {% if event.event_image %}
-                    <img src="{{ event.event_image.url }}" class="card-img-top" alt="{{ event.event_name }}">
+                    <img src="{% static 'img/event_img.png' %}" class="card-img-top" alt="{{ event.event_name }}">
                 {% else %}
                     <img src="{% static 'event_images/select_image.png' %}" class="card-img-top" alt="Event Image">
                     {% endif %}
