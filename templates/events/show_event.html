@@ -1,0 +1,72 @@
+{% extends "../utils/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <div class="row align-items-center">
+        <div class="col-md-5">
+            <div class="event-image">
+                {% if event.event_image %}
+                    <img src="{{ event.event_image.url }}" alt="{{ event.event_name }}" class="img-fluid rounded shadow-sm">
+                {% else %}
+                    <img src="{% static 'images/default_event.jpg' %}" alt="Etkinlik Resmi" class="img-fluid rounded shadow-sm">
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="event-content p-3">
+                <h1 class="mb-3 title">{{ event.event_name }}</h1>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="event-category text-primary mb-0">Category: <strong>{{ event.event_category }}</strong></p>
+                    <p class="event-category text-primary mb-0">Event Owner: <strong>{{ event.event_owner.username }}</strong></p>
+                </div>
+
+                <ul class="list-group mb-3">
+                    <li class="list-group-item"><span>📅</span> Date: <strong>{{ event.event_date }}</strong></li>
+                    <li class="list-group-item"><span>⏰</span> Time: <strong>{{ event.event_time }}</strong></li>
+                    <li class="list-group-item"><span>🕒</span> Duration: <strong>{{ event.event_duration }} hours</strong></li>
+                    <li class="list-group-item"><span>📍</span> Location: <strong>{{ event.event_location }}</strong></li>
+                </ul>
+
+                <p class="event-description mb-3">📝 Description: {{ event.event_description }}</p>
+                <a href="{% url 'events:all_events' %}" class="btn btn-primary w-100 mt-3">🔙 Go Back</a>
+
+                {% if request.user == event.event_owner %}
+                    <form action="{% url 'events:delete_event' event.event_id %}" method="POST" class="mt-3">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger w-100">❌ Remove Event</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Messaging Panel -->
+    <div class="mt-5">
+        <h2>Messages</h2>
+        <div class="card">
+            <div class="card-body">
+                {% for message in messages %}
+                    <div class="mb-3">
+                        <p><strong>{{ message.sender.username }}</strong> ({{ message.sent_time|date:"d M Y H:i" }}):</p>
+                        <p>{{ message.message_text }}</p>
+                        <hr>
+                    </div>
+                {% empty %}
+                    <p>No messages yet. Be the first to send one!</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Message Form -->
+        <form method="POST" action="{% url 'messaging:send_message' event.event_id %}" class="mt-3">
+            {% csrf_token %}
+            <textarea name="message_text" class="form-control mb-2" rows="2" placeholder="Write your message here..." required></textarea>
+            <button type="submit" class="btn btn-primary mt-1">Send Message</button>
+        </form>
+    </div>
+</div>
+
+{% endblock body %}

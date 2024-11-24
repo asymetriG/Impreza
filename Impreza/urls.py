@@ -26,7 +26,8 @@ urlpatterns = [
     path("",main_page,name="index"),
     path('authentication/', include("authentication.urls")),
     path('events/', include("events.urls")),
-    path("administration/" , include("administration.urls"))
+    path("administration/" , include("administration.urls")),
+    path("messaging/",include("messaging.urls"))
 ]
 
 if settings.DEBUG:

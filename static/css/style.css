@@ -1,0 +1,67 @@
+.event-image {
+    flex: 1;
+    max-width: 400px;
+}
+
+.event-photo {
+    width: 100%;
+    height: 300px; /* Sabit yükseklik ayarı */
+    object-fit: cover; /* Orantılı kesim için */
+    border-radius: 10px;
+    border-right: 2px solid #eee;
+}
+
+.event-content {
+    flex: 2;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1.title {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.event-category {
+    font-size: 18px;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.event-info p {
+    font-size: 16px;
+    color: #555;
+    margin: 8px 0;
+}
+
+.event-description {
+    font-size: 18px;
+    color: #333;
+    margin: 15px 0;
+}
+
+.event-owner {
+    font-size: 14px;
+    color: #555;
+    text-align: right;
+}
+
+.back-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
