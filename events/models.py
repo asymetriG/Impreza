@@ -12,6 +12,7 @@ class Event(models.Model):
     event_location = models.CharField(max_length=60,blank=True, null=True)
     event_category = models.CharField(max_length=60,blank=True, null=True)
     event_image = models.ImageField(upload_to='event_images', blank=True, null=True)
+    event_is_approved = models.BooleanField(blank=True,null=True)
     event_owner = models.ForeignKey(User,on_delete=models.CASCADE)
     
     attendees = models.ManyToManyField(User, related_name='events', blank=True)

@@ -1,24 +1,29 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib.auth.models import User
+from authentication.models import User as CustomUserModel
+from authentication.models import Profile
+from events.models import Event
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import logout
-
-def administration_panel(request):
-
-    return render(request, "administration/admin_panel.html")
+from messaging.models import Message
 
 
-def administration_login(request):
-    if request.method == "POST":
-        username = request.POST.get('admin_username')
-        password = request.POST.get('admin_password')
+@login_required
+def dashboard(request):
+    if request.method == "POST" and "approve_event_id" in request.POST:
+        event_id = request.POST.get("approve_event_id")
+        try:
+            event = Event.objects.get(pk=event_id)
+            event.event_is_approved = True
+            event.save()
+            messages.success(request, f"Event '{event.event_name}' approved successfully.")
+        except Event.DoesNotExist:
+            messages.error(request, "Event not found.")
+        return redirect("administration:dashboard")
 
-        if username == "admin" and password == "admin":
-            return render(request, "administration/admin_panel.html")
-        else:
-            messages.error(request, "Login not successful.")
-            return redirect('administration:admin_login')
+    not_approved_events = Event.objects.filter(event_is_approved=False)
+    approved_events = Event.objects.filter(event_is_approved=True)
     
-    return render(request,"administration/admin_login.html")
-
-def admin_logout(request):
-    return render(request,"administration/admin_login.html")
+    
+    
+    return render(request, "administration/dashboard.html", {"not_approved_events": not_approved_events})

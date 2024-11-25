@@ -21,9 +21,16 @@
                             <strong>Date:</strong> {{ event.event_date|date:"M d, Y" }} <br>
                             <strong>Time:</strong> {{ event.event_time }}
                         </p>
+                        {% if event.event_is_approved %}
                         <div class="mt-auto">
                             <a href="{% url 'events:show_event' event.event_id %}" class="btn btn-primary">View Event</a>
                         </div>
+                        {% else %}
+                        <div class="mt-auto">
+                            <a href="#" class="btn btn-danger w-100 disabled">Pending Approvement</a>
+                        </div>
+                        {% endif %}
+                        
                     </div>
                 </div>
             </div>

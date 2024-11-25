@@ -15,7 +15,7 @@ def my_events(request):
 
 
 def all_events(request):
-    events = Event.objects.all()
+    events = Event.objects.filter(event_is_approved=True)
     return render(request, 'events/all_events.html', {'events': events})
 
 
@@ -73,7 +73,8 @@ def create_event(request):
             event_category=event_category,
             event_description=event_description,
             event_image=event_image,
-            event_owner=request.user  
+            event_owner=request.user,
+            event_is_approved=False  
         )
         
         event.save()

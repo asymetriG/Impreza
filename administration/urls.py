@@ -7,7 +7,5 @@ from django.conf.urls.static import static
 app_name = "administration"
 
 urlpatterns = [
-    path("administration_panel",views.administration_panel,name='administration_panel'),
-    path("administration_login",views.administration_login,name="administration_login"),
-    path("administration_logout",views.admin_logout,name="administration_logout")
+    path("dashboard/",views.dashboard,name="dashboard")
 ]
