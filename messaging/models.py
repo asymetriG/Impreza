@@ -11,4 +11,4 @@ class Message(models.Model):
     sent_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Message from {self.sender.username} on {self.sent_time}"
+        return self.message_text

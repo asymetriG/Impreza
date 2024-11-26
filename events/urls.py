@@ -13,4 +13,5 @@ urlpatterns = [
     path("my_profile",views.my_profile,name="my_profile"),
     path("show_event/<int:id>",views.show_event,name= "show_event"),
     path('<int:id>/delete/', views.delete_event, name='delete_event'),
+    path('join_event/<int:id>/', views.join_event, name='join_event'),
 ]

@@ -5,7 +5,8 @@ from .models import Profile
 from django.contrib.auth import authenticate,logout
 from django.contrib.auth import login as django_login
 from hashlib import sha256
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
+
 
 def index(request):
     return render(request,"utils/index.html")
@@ -159,7 +160,7 @@ def change_profile_picture(request):
     else:
         messages.error(request, "Please select a valid image file.")
 
-    return redirect('authentication:my_profile')
+    return redirect('events:my_profile')
 
 def logout_view(request):
     logout(request)

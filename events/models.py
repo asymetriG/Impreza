@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class Event(models.Model):
     event_id = models.AutoField(primary_key=True)
     event_name = models.CharField(max_length=60,blank=True, null=True)
@@ -20,4 +21,13 @@ class Event(models.Model):
     def __str__(self):
         return self.event_name
     
+
     
+class Point(models.Model):
+    point_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.point_id
+        

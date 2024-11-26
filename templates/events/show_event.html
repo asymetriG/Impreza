@@ -10,7 +10,7 @@
                 {% if event.event_image %}
                     <img src="{{ event.event_image.url }}" alt="{{ event.event_name }}" class="img-fluid rounded shadow-sm">
                 {% else %}
-                    <img src="{% static 'images/default_event.jpg' %}" alt="Etkinlik Resmi" class="img-fluid rounded shadow-sm">
+                    <img src="{% static 'images/default_event.jpg' %}" alt="Event Image" class="img-fluid rounded shadow-sm">
                 {% endif %}
             </div>
         </div>
@@ -29,8 +29,8 @@
                     <li class="list-group-item"><span>🕒</span> Duration: <strong>{{ event.event_duration }} hours</strong></li>
                     <li class="list-group-item"><span>📍</span> Location: <strong>{{ event.event_location }}</strong></li>
                 </ul>
-
                 <p class="event-description mb-3">📝 Description: {{ event.event_description }}</p>
+                <a href="{% url 'events:join_event' event.event_id %}" class="btn btn-warning w-100 mt-3">Join Event</a>
                 <a href="{% url 'events:all_events' %}" class="btn btn-primary w-100 mt-3">🔙 Go Back</a>
 
                 {% if request.user == event.event_owner %}
@@ -43,30 +43,59 @@
         </div>
     </div>
 
-    <!-- Messaging Panel -->
-    <div class="mt-5">
-        <h2>Messages</h2>
-        <div class="card">
-            <div class="card-body">
-                {% for message in messages %}
-                    <div class="mb-3">
-                        <p><strong>{{ message.sender.username }}</strong> ({{ message.sent_time|date:"d M Y H:i" }}):</p>
-                        <p>{{ message.message_text }}</p>
-                        <hr>
-                    </div>
-                {% empty %}
-                    <p>No messages yet. Be the first to send one!</p>
-                {% endfor %}
+
+    {% if request.user in event.attendees.all %}
+    <div class="row">
+        <div class="col-md-9">
+            <h2>Messages</h2>
+            <div class="card">
+                <div class="card-body">
+                    {% for message in event_messages %}
+                        <div class="mb-3">
+                            <p><strong>{{ message.sender.username }}</strong> ({{ message.sent_time|date:"d M Y H:i" }}):</p>
+                            <p>{{ message.message_text }}</p>
+                            <hr>
+                        </div>
+                    {% empty %}
+                        <p>No messages yet. Be the first to send one!</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Message Form -->
+            <form method="POST" action="{% url 'messaging:send_message' event.event_id %}" class="mt-3">
+                {% csrf_token %}
+                <textarea name="message_text" class="form-control mb-2" rows="2" placeholder="Write your message here..." required></textarea>
+                <button type="submit" class="btn btn-primary mt-1 mb-2">Send Message</button>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <h2>Attendees</h2>
+            <div class="card">
+                <div class="card-body">
+                    {% if event.attendees.exists %}
+                        <ul class="list-group">
+                            {% for attendee in event.attendees.all %}
+                                <li class="list-group-item d-flex align-items-center">
+                                    <span class="me-2">👤</span>
+                                    <span>{{ attendee.username }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No attendees yet. Be the first to join!</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
-
-        <!-- Message Form -->
-        <form method="POST" action="{% url 'messaging:send_message' event.event_id %}" class="mt-3">
-            {% csrf_token %}
-            <textarea name="message_text" class="form-control mb-2" rows="2" placeholder="Write your message here..." required></textarea>
-            <button type="submit" class="btn btn-primary mt-1">Send Message</button>
-        </form>
     </div>
+    </div>
+        
+    {% else %}
+        <div class="mt-5 alert alert-warning">
+            You need to join the event to see and send messages.
+        </div>
+    {% endif %}
 </div>
 
 {% endblock body %}
