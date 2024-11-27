@@ -72,9 +72,10 @@ def join_event(request, id):
             
             event.attendees.add(request.user)
             
-            row = Point.objects.filter(user=request.user,event=event)[0]
+            row = Point.objects.filter(user=request.user,event=event)
             
-            if row:
+            if len(row)>=1:
+                row = row[0]
                 row.point_score = row.point_score+10
                 row.save()
                 
@@ -124,7 +125,8 @@ def create_event(request):
             point_score=15  
         )
 
-        # Feedback and redirection
+        event.attendees.add(request.user)
+        
         messages.success(request, 'Event created successfully, and you have been added as an attendee!')
         return redirect('events:my_events')
 
