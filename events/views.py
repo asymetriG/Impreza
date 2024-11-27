@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Event
+from .models import Event,Point
 from django.contrib.auth.models import User
 from authentication.models import User as CustomUserModel
 from authentication.models import Profile
@@ -25,9 +25,16 @@ def all_events(request):
 @login_required
 def my_profile(request):
     
+    total_point = 0
+    
     user = User.objects.get(username=request.user.username)
     
-    return render(request, "events/my_profile.html", {"user": user})
+    total_points = Point.objects.filter(user=request.user)
+    
+    for point in total_points:
+        total_point+=point.point_score
+    
+    return render(request, "events/my_profile.html", {"user": user,"total_point":total_point})
 
 @login_required
 def show_event(request, id):
@@ -61,10 +68,22 @@ def join_event(request, id):
 
     if event.event_is_approved:
         if request.user not in event.attendees.all():
+            
+            
             event.attendees.add(request.user)
+            
+            row = Point.objects.filter(user=request.user,event=event)[0]
+            
+            if row:
+                row.point_score = row.point_score+10
+                row.save()
+                
+            else:
+                Point.objects.create(user=request.user,event=event,point_score=10)
+            
             messages.success(request, "You have successfully joined the event.")
         else:
-            messages.warning(request, "You have already joined this event.")
+            messages.info(request, "You have already joined this event.")
     else:
         messages.error(request, "This event is not approved yet.")
 
@@ -95,12 +114,15 @@ def create_event(request):
             event_description=event_description,
             event_image=event_image,
             event_owner=request.user,
-            event_is_approved=False  # Events require approval
+            event_is_approved=False 
         )
         event.save()
 
-        # Automatically add the event creator to attendees
-        event.attendees.add(request.user)
+        Point.objects.create(
+            user=request.user,
+            event=event,
+            point_score=15  
+        )
 
         # Feedback and redirection
         messages.success(request, 'Event created successfully, and you have been added as an attendee!')
