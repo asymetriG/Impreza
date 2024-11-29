@@ -33,6 +33,7 @@
             <td>{{ event.event_location }}</td>
             {% if event.event_is_approved %}
             <td>
+                <a href="{% url 'administration:edit_event' event.event_id %}" class="btn btn-sm btn-primary">Edit</a>
                 <form method="POST" style="display:inline;">
                     {% csrf_token %}
                     <input type="hidden" name="disapprove_event_id" value="{{ event.event_id }}">
@@ -41,6 +42,7 @@
             </td>
             {% else %}
             <td>
+                <a href="{% url 'administration:edit_event' user.id %}" class="btn btn-sm btn-primary">Edit</a>
                 <form method="POST" style="display:inline;">
                     {% csrf_token %}
                     <input type="hidden" name="approve_event_id" value="{{ event.event_id }}">

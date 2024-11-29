@@ -6,7 +6,8 @@ from authentication.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from messaging.models import Message
-
+from .models import Location
+import math
 
 
 def my_events(request):
@@ -16,11 +17,46 @@ def my_events(request):
 
 
 def all_events(request):
-    if request.user.is_authenticated:
-        events = Event.objects.filter(event_is_approved=True)
-        return render(request, 'events/all_events.html', {'events': events})
+    if not request.user.is_authenticated:
+        return redirect("authentication:login")
 
-    return redirect("authentication:login")
+    all_of_the_events = Event.objects.filter(event_is_approved=True)
+
+    user_profile = request.user.profile
+    user_interests = set(user_profile.interests.split(',')) if user_profile.interests else set()
+    user_event_history = request.user.events.all()  # User's past attended events
+    user_location = user_profile.location
+
+    event_scores = []
+
+    for event in all_of_the_events:
+
+        event_interests = set(event.event_category.split(',')) if event.event_category else set()
+        interest_score = len(user_interests.intersection(event_interests))
+
+
+        has_attended_before = event in user_event_history
+        history_score = 1 if has_attended_before else 0
+
+
+        location_score = 0
+        if event.event_location and user_location:
+            distance = math.sqrt(
+                pow(event.event_location.location_latitude - user_location.location_latitude, 2) +
+                pow(event.event_location.location_longitude - user_location.location_longitude, 2)
+            )
+            location_score = 1 / (1 + distance)  
+
+
+        total_score = (interest_score * 0.5) + (history_score * 0.3) + (location_score * 0.2)
+        event_scores.append((event, total_score))
+
+
+    sorted_events = sorted(event_scores, key=lambda x: x[1], reverse=True)
+
+    sorted_events = [event[0] for event in sorted_events]
+
+    return render(request, 'events/all_events.html', {'events': sorted_events})
 
 @login_required
 def my_profile(request):
@@ -32,7 +68,7 @@ def my_profile(request):
     total_points = Point.objects.filter(user=request.user)
     
     for point in total_points:
-        total_point+=point.point_score
+        total_point+=point.point_score #CRUD create read update delete
     
     return render(request, "events/my_profile.html", {"user": user,"total_point":total_point})
 
@@ -99,7 +135,7 @@ def create_event(request):
         event_date = request.POST.get('event_date')
         event_time = request.POST.get('event_time')
         event_duration = request.POST.get('event_duration')
-        event_location = request.POST.get('event_location')
+        event_location = Location.objects.filter(location_name=request.POST.get('event_location'))[0]
         event_category = request.POST.get('interests')
         event_description = request.POST.get('event_description')
         event_image = request.FILES.get('event_image')

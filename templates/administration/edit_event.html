@@ -1,0 +1,52 @@
+{% extends "../utils/layout.html" %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <h2>Edit Event</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="event_name" class="form-label">Event Name</label>
+            <input type="text" class="form-control" id="event_name" name="event_name" value="{{ event.event_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="event_description" class="form-label">Event Description</label>
+            <textarea class="form-control" id="event_description" name="event_description" rows="4">{{ event.event_description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="event_date" class="form-label">Event Date</label>
+            <input type="date" class="form-control" id="event_date" name="event_date" value="{{ event.event_date|date:'Y-m-d' }}">
+        </div>
+        <div class="mb-3">
+            <label for="event_time" class="form-label">Event Time</label>
+            <input type="time" class="form-control" id="event_time" name="event_time" value="{{ event.event_time }}">
+        </div>
+        <div class="mb-3">
+            <label for="event_duration" class="form-label">Event Duration (in hours)</label>
+            <input type="number" class="form-control" id="event_duration" name="event_duration" value="{{ event.event_duration }}">
+        </div>
+        <div class="mb-3">
+            <label for="event_location" class="form-label">Event Location</label>
+            <input type="text" class="form-control" id="event_location" name="event_location" value="{{ event.event_location.location_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="event_category" class="form-label">Event Category</label>
+            <input type="text" class="form-control" id="event_category" name="event_category" value="{{ event.event_category }}">
+        </div>
+        <div class="mb-3">
+            <label for="event_image" class="form-label">Event Image</label>
+            <input type="file" class="form-control" id="event_image" name="event_image">
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+        {% if request.user.is_superuser %}
+        <a href="{% url 'administration:dashboard' %}" class="btn btn-secondary mt-3">Cancel</a>
+        {% else %}
+        <a href="{% url 'events:my_events' %}" class="btn btn-secondary mt-3">Cancel</a>
+        {% endif %}
+        
+        <br><br>
+    </form>
+</div>
+{% endblock body %}

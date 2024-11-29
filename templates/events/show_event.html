@@ -27,13 +27,13 @@
                     <li class="list-group-item"><span>📅</span> Date: <strong>{{ event.event_date }}</strong></li>
                     <li class="list-group-item"><span>⏰</span> Time: <strong>{{ event.event_time }}</strong></li>
                     <li class="list-group-item"><span>🕒</span> Duration: <strong>{{ event.event_duration }} hours</strong></li>
-                    <li class="list-group-item"><span>📍</span> Location: <strong>{{ event.event_location }}</strong></li>
+                    <li class="list-group-item"><span>📍</span> Location: <strong>{{ event.event_location.location_name }}</strong></li>
                 </ul>
                 <p class="event-description mb-3">📝 Description: {{ event.event_description }}</p>
                 <a href="{% url 'events:join_event' event.event_id %}" class="btn btn-warning w-100 mt-3">Join Event</a>
                 <a href="{% url 'events:all_events' %}" class="btn btn-primary w-100 mt-3">🔙 Go Back</a>
 
-                {% if request.user == event.event_owner %}
+                {% if request.user == event.event_owner or request.user.is_superuser %}
                     <form action="{% url 'events:delete_event' event.event_id %}" method="POST" class="mt-3">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger w-100">❌ Remove Event</button>
@@ -44,7 +44,7 @@
     </div>
 
 
-    {% if request.user in event.attendees.all %}
+    {% if request.user in event.attendees.all or request.user.is_superuser %}
     <div class="row">
         <div class="col-md-9">
             <h2>Messages</h2>

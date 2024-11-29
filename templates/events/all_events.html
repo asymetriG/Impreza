@@ -9,13 +9,13 @@
                     {% if event.event_image %}
                     <img src="{% static 'img/event_img.png' %}" class="card-img-top" alt="{{ event.event_name }}">
                 {% else %}
-                    <img src="{% static 'event_images/select_image.png' %}" class="card-img-top" alt="Event Image">
+                    <img src="{% static 'img/event_img.png' %}" class="card-img-top" alt="Event Image">
                     {% endif %}
                     <div class="card-body d-flex flex-column"> 
                         <h5 class="card-title">{{ event.event_name }}</h5>
                         <p class="card-text">{{ event.event_description|truncatewords:20 }}</p>
                         <p class="card-text">
-                            <strong>Location:</strong> {{ event.event_location }} <br>
+                            <strong>Location:</strong> {{ event.event_location.location_name }} <br>
                             <strong>Date:</strong> {{ event.event_date|date:"M d, Y" }} <br>
                             <strong>Time:</strong> {{ event.event_time }}
                         </p>

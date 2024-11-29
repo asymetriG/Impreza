@@ -29,7 +29,7 @@
             <h4>Personal Details</h4>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Birth Date: {{user.profile.birth_date}} </strong></p>
-            <p><strong>Location: {{user.profile.location}}</strong></p>
+            <p><strong>Location: {{user.profile.location.location_name}}</strong></p>
             <p><strong>Phone Number: {{user.profile.phone_number}}</strong></p>
             <p><strong>Gender: {{user.profile.gender}}</strong></p>
             <p><strong>Interests:</strong> {{ user.profile.interests }}</p>

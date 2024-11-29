@@ -8,6 +8,7 @@ app_name = "administration"
 
 urlpatterns = [
     path("dashboard/",views.dashboard,name="dashboard"),
-    path('edit-user/<int:user_id>/', views.edit_user, name='edit_user'),
-    path('delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('edit_user/<int:user_id>', views.edit_user, name='edit_user'),
+    path('delete_user/<int:user_id>', views.delete_user, name='delete_user'),
+    path('edit_event/<int:event_id>',views.edit_event,name = 'edit_event'),
 ]

@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate,logout
 from django.contrib.auth import login as django_login
 from hashlib import sha256
 from django.contrib.auth.decorators import login_required,user_passes_test
+from events.models import Location
 
 
 def index(request):
@@ -22,7 +23,7 @@ def register(request):
         confirm_password = request.POST.get('confirm_password')
         birth_date = request.POST.get('birthdate')
         gender = request.POST.get('gender')
-        location = request.POST.get('location')
+        location = Location.objects.filter(location_name=request.POST.get('location'))[0]
         phone_number = request.POST.get('phone')
         
         security_question = request.POST.get('security_question')
@@ -174,7 +175,7 @@ def edit_profile(request):
     
     if request.method == "POST":
         profile.birth_date = request.POST.get('birthdate')
-        profile.location = request.POST.get('location')
+        profile.location = Location.objects.filter(location_name=request.POST.get('location'))[0]
         profile.phone_number = request.POST.get('phone')
         profile.gender = request.POST.get('gender')
 

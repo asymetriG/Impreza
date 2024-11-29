@@ -6,6 +6,7 @@ from events.models import Event
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib import messages
 from messaging.models import Message
+from events.models import Location
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -20,7 +21,6 @@ def edit_user(request, user_id):
         messages.success(request, 'User updated successfully.')
         return redirect('manage_users')
     return render(request, 'administration/edit_user.html', {'user': user})
-
 
 @user_passes_test(lambda u: u.is_superuser)
 def delete_user(request, user_id):
@@ -59,3 +59,25 @@ def dashboard(request):
     events = Event.objects.all()
 
     return render(request, "administration/dashboard.html", {"events": events,"users":users})
+
+@login_required
+def edit_event(request, event_id):
+    event = Event.objects.filter(event_id = event_id)[0] 
+    if request.method == 'POST':
+        event.event_name = request.POST.get('event_name')
+        event.event_description = request.POST.get('event_description')
+        event.event_date = request.POST.get('event_date')
+        event.event_time = request.POST.get('event_time')
+        event.event_duration = request.POST.get('event_duration')
+        event.event_location = Location.objects.filter(location_name=request.POST.get('event_location'))[0]
+        event.event_category = request.POST.get('event_category')
+        event.event_image = request.FILES.get('event_image')
+
+        event.save()
+        messages.success(request, 'Event updated successfully.')
+        if(request.user.is_superuser):
+            return redirect('administration:dashboard')
+        else:
+            return redirect("events:my_events")
+    return render(request, 'administration/edit_event.html', {'event': event})
+
