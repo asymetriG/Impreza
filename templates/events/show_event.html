@@ -27,7 +27,7 @@
                     <li class="list-group-item"><span>📅</span> Date: <strong>{{ event.event_date }}</strong></li>
                     <li class="list-group-item"><span>⏰</span> Time: <strong>{{ event.event_time }}</strong></li>
                     <li class="list-group-item"><span>🕒</span> Duration: <strong>{{ event.event_duration }} hours</strong></li>
-                    <li class="list-group-item"><span>📍</span> Location: <strong>{{ event.event_location.location_name }}</strong></li>
+                    <li class="list-group-item"><span>📍</span> Location: <strong>{{ event.event_location.location_name }}</strong> <a href="#" class="link-offset-2 link-underline link-underline-opacity-0 ms-4">Show On Map</a></li>
                 </ul>
                 <p class="event-description mb-3">📝 Description: {{ event.event_description }}</p>
                 <a href="{% url 'events:join_event' event.event_id %}" class="btn btn-warning w-100 mt-3">Join Event</a>
