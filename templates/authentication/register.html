@@ -88,16 +88,9 @@
               <div class="mb-3">
                 <label for="location" class="form-label">Location</label>
                 <select class="form-select" id="location" name="location">
-                    <option value="Istanbul" selected>Istanbul</option>
-                    <option value="Kocaeli">Kocaeli</option>
-                    <option value="Karacabey">Karacabey</option>
-                    <option value="Izmir">Izmir</option>
-                    <option value="Isparta">Isparta</option>
-                    <option value="Antalya">Antalya</option>
-                    <option value="Konya">Konya</option>
-                    <option value="Ankara">Ankara</option>
-                    <option value="Eskisehir">Eskisehir</option>
-                    <option value="Denizli">Denizli</option>
+                    {% for location in locations %}
+                    <option value="{{location.location_name}}">{{location.location_name}}</option>
+                    {% endfor %}
                   </select>
               </div>
             </div>

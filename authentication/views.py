@@ -69,8 +69,10 @@ def register(request):
             django_login(request, user)
             messages.success(request, "Registration successful!")
             return redirect('index')  
+        
+    locations = Location.objects.all()
 
-    return render(request, "authentication/register.html")
+    return render(request, "authentication/register.html",{"locations":locations})
 
 
 def login(request):
