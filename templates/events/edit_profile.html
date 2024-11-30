@@ -105,6 +105,7 @@
                 <button id="interestButton" class="btn btn-success dropdown-toggle mb-3" type="button" aria-expanded="false">
                     Edit Interest
                 </button>
+                <a href="{% url 'authentication:reset_password' %}" class="btn btn-secondary mb-3">Reset Password</a>
                 
                 <div id="interestDropdown" class="dropdown-menu p-3 slide-down" style="min-width: 300px; display: none; overflow: hidden;">
                         {% csrf_token %}

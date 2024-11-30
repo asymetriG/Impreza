@@ -22,6 +22,7 @@ class Message(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE,null=True,blank=True)
     message_text = models.TextField(null=True,blank=True)
     is_to_all = models.BooleanField(default=False,null=True,blank=True)
+    is_read = models.BooleanField(default=False,blank=True,null=True)
     sent_time = models.DateTimeField(auto_now_add=True,null=True,blank=True)
 
     def __str__(self):

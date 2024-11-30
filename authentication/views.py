@@ -7,6 +7,7 @@ from django.contrib.auth import login as django_login
 from hashlib import sha256
 from django.contrib.auth.decorators import login_required,user_passes_test
 from events.models import Location
+from django.contrib.auth import update_session_auth_hash
 
 
 def index(request):
@@ -181,9 +182,42 @@ def delete_user(request, user_id):
     user.delete()
     
     messages.success(request, 'User deleted successfully. BYE!')
-    return redirect("index")
+    
+    if(request.user.is_superuser):
+        return redirect("administration:dashboard")
+    else:
+        return redirect("index")
         
+@login_required
+def reset_password(request):
+    if request.method == "POST":
+        current_password = request.POST.get("current_password")
+        new_password = request.POST.get("new_password")
+        new_password_again = request.POST.get("new_password_again")
+        
+        current_password = sha256(current_password.encode()).hexdigest()
 
+        if not request.user.check_password(current_password):
+            messages.error(request, "Current password is incorrect.")
+            return render(request, "authentication/reset_password.html")
+
+        
+        if new_password != new_password_again:
+            messages.error(request, "New passwords do not match.")
+            return render(request, "authentication/reset_password.html")
+
+        new_password = sha256(new_password.encode()).hexdigest()
+        
+        request.user.set_password(new_password)
+        request.user.save()
+
+        # Update the session to prevent logout
+        update_session_auth_hash(request, request.user)
+
+        messages.success(request, "Password reset successful!")
+        return redirect("events:my_profile")  # Replace with the name of your home page or another redirect URL
+
+    return render(request, "authentication/reset_password.html")  
 
 @login_required
 def edit_profile(request):

@@ -28,5 +28,100 @@
         {% empty %}
             <p>No events available.</p>
         {% endfor %}
+        <a href="#" id="showMapLink" class="btn btn-success w-100">Show Events in Map</a>
     </div>
+
+
+    <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapModalLabel">Event Locations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="map" style="width: 100%; height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const showMapLink = document.getElementById('showMapLink');
+            const mapModal = document.getElementById('mapModal');
+            const mapDiv = document.getElementById('map');
+            let map;
+    
+            // Get event locations and user location from the server
+            const eventLocations = [
+                {% for event in events %}
+                    { 
+                        name: "{{ event.event_name|escapejs }}",
+                        lat: {{ event.event_location.location_latitude|default:"0" }},
+                        lng: {{ event.event_location.location_longitude|default:"0" }}
+                    },
+                {% endfor %}
+            ];
+    
+            const userLocation = {
+                name: "{{ request.user.username|escapejs }}",
+                lat: parseFloat("{{ request.user.profile.location.location_latitude|default:'0' }}"),
+                lng: parseFloat("{{ request.user.profile.location.location_longitude|default:'0' }}")
+            };
+    
+            showMapLink.addEventListener('click', function () {
+                const modal = new bootstrap.Modal(mapModal);
+                modal.show();
+            });
+    
+            mapModal.addEventListener('shown.bs.modal', function () {
+                const mapOptions = {
+                    center: { lat: userLocation.lat, lng: userLocation.lng },
+                    zoom: 10, // Adjust zoom level for multiple markers
+                };
+    
+                if (!map) {
+                    map = new google.maps.Map(mapDiv, mapOptions);
+                } else {
+                    map.setCenter(mapOptions.center);
+                }
+    
+                // Add a marker for the user's location
+                const userMarker = new google.maps.Marker({
+                    position: { lat: userLocation.lat, lng: userLocation.lng },
+                    map: map,
+                    title: "Your Location",
+                });
+    
+                const userInfoWindow = new google.maps.InfoWindow({
+                    content: `<strong>${userLocation.name}</strong>`
+                });
+    
+                userMarker.addListener("click", () => {
+                    userInfoWindow.open(map, userMarker);
+                });
+    
+                // Add markers for events
+                eventLocations.forEach(event => {
+                    if (event.lat !== 0 && event.lng !== 0) {
+                        const eventMarker = new google.maps.Marker({
+                            position: { lat: event.lat, lng: event.lng },
+                            map: map,
+                            title: event.name,
+                        });
+    
+                        const eventInfoWindow = new google.maps.InfoWindow({
+                            content: `<strong>${event.name}</strong>`
+                        });
+    
+                        eventMarker.addListener("click", () => {
+                            eventInfoWindow.open(map, eventMarker);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    
 {% endblock body %}

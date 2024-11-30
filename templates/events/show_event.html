@@ -41,7 +41,16 @@
                     </li>
                 </ul>
                 <p class="event-description mb-3">📝 Description: {{ event.event_description }}</p>
-                <a href="{% url 'events:join_event' event.event_id %}" class="btn btn-warning w-100 mt-3">Join Event</a>
+
+                {% if request.user in event.attendees.all and request.user != event.event_owner %}
+                <form action="{% url 'events:leave_event' event.event_id %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger w-100 mt-3">Leave Event</button>
+                </form>
+                {% elif request.user not in event.attendees.all %}
+                    <a href="{% url 'events:join_event' event.event_id %}" class="btn btn-warning w-100 mt-3">Join Event</a>
+                {% endif %}
+
                 <a href="{% url 'events:all_events' %}" class="btn btn-primary w-100 mt-3">🔙 Go Back</a>
 
                 {% if request.user == event.event_owner or request.user.is_superuser %}
@@ -131,13 +140,33 @@
     </div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA15ju1bnreVDkFqP8dzrh0KXn80FMW-vY"></script>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="messageToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastSenderName">New Message</strong>
+            <small class="text-muted" id="toastTimestamp"></small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessageContent">
+            You have received a new message.
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const receiverSelect = document.querySelector('select[name="receiver"]');
         const chatDiv = document.getElementById('private-chat');
         const eventId = "{{ event.event_id }}";
         let currentReceiverId = "general"; // Default to general chat
+
+        const toastElement = document.getElementById('messageToast');
+        const toastSenderName = document.getElementById('toastSenderName');
+        const toastTimestamp = document.getElementById('toastTimestamp');
+        const toastMessageContent = document.getElementById('toastMessageContent');
+        const toast = new bootstrap.Toast(toastElement);
 
         // Function to fetch messages based on the selected receiver
         function fetchMessages() {
@@ -162,6 +191,25 @@
                         chatDiv.innerHTML = "<p>Failed to load messages. Please try again later.</p>";
                     });
             }
+
+            // Check for new private messages from other users
+            fetch(`/messaging/check_new_private_messages/${eventId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.new_message) {
+                        // Show toast for the new message
+                        if (data.sender_id !== currentReceiverId) {
+                            toastSenderName.textContent = `Message from ${data.sender_name}`;
+                            toastTimestamp.textContent = data.timestamp;
+                            toastMessageContent.textContent = data.message_text;
+                            console.log(toastSenderName.textContent)
+                            toast.show();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error checking for new messages:", error);
+                });
         }
 
         // Initial fetch of general messages
@@ -173,7 +221,7 @@
             fetchMessages();
         });
 
-        // Poll for new messages every second
+        // Poll for new messages every 2 seconds
         setInterval(fetchMessages, 2000);
 
         // Map functionality
@@ -209,6 +257,5 @@
         });
     });
 </script>
-
 
 {% endblock body %}

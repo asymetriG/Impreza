@@ -67,6 +67,7 @@
             <tr>
                 <th>#</th>
                 <th>Username</th>
+                <th>Is Super User</th>
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -79,6 +80,12 @@
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ user.username }}</td>
+                
+                {% if user.is_superuser %}
+                    <td>Yes</td>
+                {% else %}
+                    <td>No</td>
+                {% endif %} 
                 <td>{{ user.email }}</td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>

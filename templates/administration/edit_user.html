@@ -25,6 +25,14 @@
             <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {% if user.is_active %}checked{% endif %}>
             <label class="form-check-label" for="is_active">Active</label>
         </div>
+        {% if request.user != user %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="is_superuser" name="is_superuser" {% if user.is_superuser %}checked{% endif %}>
+            <label class="form-check-label" for="is_superuser">Is Super User</label>
+        </div>
+        {% else %}
+        {% endif %}
+        
         <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
         <a href="{% url 'administration:dashboard' %}" class="btn btn-secondary mt-3">Cancel</a>
     </form>

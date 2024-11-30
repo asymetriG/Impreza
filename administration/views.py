@@ -17,9 +17,11 @@ def edit_user(request, user_id):
         user.last_name = request.POST.get('last_name')
         user.email = request.POST.get('email')
         user.is_active = request.POST.get('is_active') == 'on'
+        user.is_superuser = request.POST.get('is_superuser') == 'on'
+        
         user.save()
         messages.success(request, 'User updated successfully.')
-        return redirect('manage_users')
+        return redirect('administration:dashboard')
     return render(request, 'administration/edit_user.html', {'user': user})
 
 

@@ -34,6 +34,7 @@
             <p><strong>Gender:</strong> {{ user.profile.gender }}</p>
             <p><strong>Interests:</strong> {{ user.profile.interests }}</p>
             <p><strong>Total Points:</strong> {{ total_point }}</p>
+            <p><strong>Rank:</strong> {{ user_rank }}</p>
             <p><strong>Security Question:</strong> {{ user.profile.security_question }} == {{ user.profile.security_question_answer }}</p>
 
             <a href="{% url 'authentication:edit_profile' %}" class="btn btn-warning">Edit Profile</a>

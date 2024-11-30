@@ -10,6 +10,20 @@ from .models import Location
 import math
 
 
+achievments = {
+    0:"Touch some grass bro",
+    20:"Iron",
+    40:"Bronze",
+    60:"Silver",
+    80:"Gold",
+    100:"Plat",
+    120:"Diamond",
+    140:"Ascendant",
+    160:"Immortal",
+    180:"Radiant",
+    200:"Akif"
+}
+
 def my_events(request):
     events = Event.objects.filter(event_owner=request.user)
     return render(request, 'events/my_events.html', {'events': events})
@@ -60,17 +74,20 @@ def all_events(request):
 
 @login_required
 def my_profile(request):
-    
     total_point = 0
-    
     user = User.objects.get(username=request.user.username)
-    
     total_points = Point.objects.filter(user=request.user)
-    
+
     for point in total_points:
-        total_point+=point.point_score #CRUD create read update delete
-    
-    return render(request, "events/my_profile.html", {"user": user,"total_point":total_point})
+        total_point += point.point_score  
+
+
+    user_rank = "Unranked"  
+    for points_required, rank in sorted(achievments.items()):
+        if total_point >= points_required:
+            user_rank = rank
+
+    return render(request, "events/my_profile.html", {"user": user, "total_point": total_point, "user_rank": user_rank})
 
 @login_required
 def show_event(request, id):
@@ -118,28 +135,58 @@ def join_event(request, id):
 
     if event.event_is_approved:
         if request.user not in event.attendees.all():
-            
-            
             event.attendees.add(request.user)
-            
-            row = Point.objects.filter(user=request.user,event=event)
-            
-            if len(row)>=1:
-                row = row[0]
-                row.point_score = row.point_score+10
+
+            row = Point.objects.filter(user=request.user, event=event)
+
+            if row.exists():
+                row = row.first()
+                row.point_score += 10
                 row.save()
-                
             else:
-                Point.objects.create(user=request.user,event=event,point_score=10)
-            
-            messages.success(request, "You have successfully joined the event.")
+                
+                is_first_event = not Point.objects.filter(user=request.user).exists()
+                initial_points = 10 + (20 if is_first_event else 0)
+                Point.objects.create(user=request.user, event=event, point_score=initial_points)
+
+            messages.success(
+                request, 
+                f"You have successfully joined the event and earned {initial_points} points!"
+            )
         else:
             messages.info(request, "You have already joined this event.")
     else:
         messages.error(request, "This event is not approved yet.")
 
-    return redirect('events:show_event', id=id)    
+    return redirect('events:show_event', id=id)
 
+
+@login_required
+def leave_event(request, event_id):
+    event = get_object_or_404(Event, event_id=event_id)
+
+    # Prevent the event owner from leaving their own event
+    if request.user == event.event_owner:
+        messages.error(request, "You cannot leave your own event.")
+        return redirect('events:show_event', id=event_id)
+
+    if request.user in event.attendees.all():
+        event.attendees.remove(request.user)
+
+        # Deduct points for the event
+        point_entry = Point.objects.filter(user=request.user, event=event).first()
+        if point_entry:
+            point_entry.point_score -= 10
+            if point_entry.point_score <= 0:
+                point_entry.delete()
+            else:
+                point_entry.save()
+
+        messages.success(request, "You have successfully left the event and 10 points have been deducted.")
+    else:
+        messages.error(request, "You are not an attendee of this event.")
+
+    return redirect('events:show_event', id=event_id)
 
 @login_required
 def create_event(request):

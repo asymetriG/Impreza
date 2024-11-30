@@ -39,6 +39,27 @@ def conversation(request, receiver_id, event_id):
     html = render_to_string('messaging/private_messages.html', {'messages': messages})
     return JsonResponse({'html': html})
 
+@login_required
+def check_new_private_messages(request, event_id):
+    event = get_object_or_404(Event, event_id=event_id)
+    latest_message = Message.objects.filter(
+        event=event,
+        is_to_all=False,
+        receiver=request.user
+    ).order_by('-sent_time').first()
+
+    if latest_message and not latest_message.is_read:
+        latest_message.is_read = True
+        latest_message.save()
+        return JsonResponse({
+            "new_message": True,
+            "sender_id": latest_message.sender.id,
+            "sender_name": latest_message.sender.username,
+            "message_text": latest_message.message_text,
+            "timestamp": latest_message.sent_time.strftime('%d %b %Y %H:%M:%S'),
+        })
+
+    return JsonResponse({"new_message": False})
 
 @login_required
 def send_message(request, event_id):
@@ -57,7 +78,8 @@ def send_message(request, event_id):
                 receiver=receiver,
                 event=event,
                 message_text=message_text,
-                is_to_all=0
+                is_to_all=0,
+                is_read=False,
             )
 
             messages.success(request, "Message sent successfully!")
@@ -67,7 +89,8 @@ def send_message(request, event_id):
                 sender=request.user,
                 event=event,
                 message_text=message_text,
-                is_to_all=1
+                is_to_all=1,
+                is_read=True,
             )
 
             messages.success(request, "Message sent successfully!")
