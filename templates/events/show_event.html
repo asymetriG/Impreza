@@ -27,7 +27,18 @@
                     <li class="list-group-item"><span>📅</span> Date: <strong>{{ event.event_date }}</strong></li>
                     <li class="list-group-item"><span>⏰</span> Time: <strong>{{ event.event_time }}</strong></li>
                     <li class="list-group-item"><span>🕒</span> Duration: <strong>{{ event.event_duration }} hours</strong></li>
-                    <li class="list-group-item"><span>📍</span> Location: <strong>{{ event.event_location.location_name }}</strong> <a href="#" class="link-offset-2 link-underline link-underline-opacity-0 ms-4">Show On Map</a></li>
+                    <li class="list-group-item">
+                        <span>📍</span> Location: <strong>{{ event.event_location.location_name }}</strong> 
+                        <a href="#" 
+                           class="link-offset-2 link-underline link-underline-opacity-0 ms-4" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#mapModal"
+                           id="showMapLink"
+                           data-lat="{{ event.event_location.location_latitude }}"
+                           data-lng="{{ event.event_location.location_longitude }}">
+                            Show On Map
+                        </a>
+                    </li>
                 </ul>
                 <p class="event-description mb-3">📝 Description: {{ event.event_description }}</p>
                 <a href="{% url 'events:join_event' event.event_id %}" class="btn btn-warning w-100 mt-3">Join Event</a>
@@ -42,7 +53,6 @@
             </div>
         </div>
     </div>
-
 
     {% if request.user in event.attendees.all or request.user.is_superuser %}
     <div class="row">
@@ -97,5 +107,62 @@
         </div>
     {% endif %}
 </div>
+
+<!-- Harita Modal -->
+<div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mapModalLabel">Event Location</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Harita Div -->
+                <div id="map" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA15ju1bnreVDkFqP8dzrh0KXn80FMW-vY"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mapModal = document.getElementById('mapModal');
+        const mapDiv = document.getElementById('map');
+        let map;
+
+        // Modal gösterilmeden önce haritayı yükle
+        mapModal.addEventListener('shown.bs.modal', function (event) {
+            const showMapLink = document.getElementById('showMapLink');
+            const latitude = parseFloat(showMapLink.getAttribute('data-lat'));
+            const longitude = parseFloat(showMapLink.getAttribute('data-lng'));
+            
+            // Harita ayarları
+            const mapOptions = {
+                center: { lat: latitude, lng: longitude },
+                zoom: 15,
+            };
+
+            // Haritayı oluştur
+            if (!map) {
+                map = new google.maps.Map(mapDiv, mapOptions);
+            } else {
+                map.setCenter(mapOptions.center);
+            }
+
+            // Marker ekle
+            new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+            });
+
+            new google.maps.Marker({
+                position: { lat : parseFloat("{{request.user.profile.location.location_latitude}}"), lng: parseFloat("{{request.user.profile.location.location_longitude}}")},
+                map: map,
+            });
+        });
+    });
+</script>
 
 {% endblock body %}
