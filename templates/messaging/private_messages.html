@@ -1,0 +1,9 @@
+{% for message in messages %}
+    <div class="mb-3">
+        <p><strong>{{ message.sender.username }}</strong> ({{ message.sent_time|date:"d M Y H:i" }}):</p>
+        <p>{{ message.message_text }}</p>
+        <hr>
+    </div>
+{% empty %}
+    <p>No private messages yet. Start a conversation!</p>
+{% endfor %}

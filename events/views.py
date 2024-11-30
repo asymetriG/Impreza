@@ -80,9 +80,23 @@ def show_event(request, id):
         messages.warning(request, "This event is not approved and cannot be viewed.")
         return redirect('events:all_events')
     
-    event_messages = Message.objects.filter(event=event).order_by('sent_time')
     
-    return render(request, 'events/show_event.html', {"event": event, "event_messages": event_messages})
+    general_messages = Message.objects.filter(event=event, is_to_all=True).order_by('sent_time')
+    private_messages = Message.objects.filter(
+        event=event,
+        is_to_all=False,
+        sender=request.user
+    ) | Message.objects.filter(
+        event=event,
+        is_to_all=False,
+        receiver=request.user
+    ).order_by('sent_time')
+
+    return render(request, 'events/show_event.html', {
+        "event": event, 
+        "general_messages": general_messages,
+        "private_messages": private_messages
+    })
     
     
     
