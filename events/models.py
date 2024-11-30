@@ -31,9 +31,9 @@ class Event(models.Model):
     
 class Point(models.Model):
     point_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    event = models.ForeignKey(Event,on_delete=models.CASCADE)
-    point_score = models.IntegerField(blank=True, null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,null=True,blank=True)
+    point_score = models.IntegerField(null=True,blank=True)
 
     def __str__(self):
         return self.point_id

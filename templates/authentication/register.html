@@ -8,7 +8,7 @@
 <hr />
   <div class="row">
       <div class="col-md-12">
-        <form method="post" class="needs-validation" novalidate>
+        <form method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
           {% csrf_token %}
           <div class="row">
             <div class="mb-3 col-md-6">
@@ -131,6 +131,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="mb-3">
+          <label for="profile_picture" class="form-label">Profile Picture</label>
+          <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" required>
+          <div class="invalid-feedback">
+            Please select an profile picture.
+        </div>
         </div>
           <div class="text-center">
             <button style="width:100%" type="submit" class="btn btn-primary mt-4 mb-4">Register</button>

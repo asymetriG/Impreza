@@ -129,6 +129,7 @@ def join_event(request, id):
 
 @login_required
 def create_event(request):
+    locations = Location.objects.all()
     if request.method == 'POST':
         # Extract form data
         event_name = request.POST.get('event_name')
@@ -166,4 +167,4 @@ def create_event(request):
         messages.success(request, 'Event created successfully, and you have been added as an attendee!')
         return redirect('events:my_events')
 
-    return render(request, 'events/add_event.html')
+    return render(request, 'events/add_event.html',{"locations":locations})

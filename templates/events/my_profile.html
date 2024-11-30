@@ -28,21 +28,20 @@
 
             <h4>Personal Details</h4>
             <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Birth Date: {{user.profile.birth_date}} </strong></p>
-            <p><strong>Location: {{user.profile.location.location_name}}</strong></p>
-            <p><strong>Phone Number: {{user.profile.phone_number}}</strong></p>
-            <p><strong>Gender: {{user.profile.gender}}</strong></p>
+            <p><strong>Birth Date: </strong>{{ user.profile.birth_date }}</p>
+            <p><strong>Location:</strong> {{ user.profile.location.location_name }}</p>
+            <p><strong>Phone Number:</strong> {{ user.profile.phone_number }}</p>
+            <p><strong>Gender:</strong> {{ user.profile.gender }}</p>
             <p><strong>Interests:</strong> {{ user.profile.interests }}</p>
             <p><strong>Total Points:</strong> {{ total_point }}</p>
-            <p><strong>Security Question: {{user.profile.security_question}} == {{user.profile.security_question_answer}} </strong></p>
+            <p><strong>Security Question:</strong> {{ user.profile.security_question }} == {{ user.profile.security_question_answer }}</p>
 
-            
             <a href="{% url 'authentication:edit_profile' %}" class="btn btn-warning">Edit Profile</a>
-              
+            <a href="{% url 'authentication:delete_user' user.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this account?');">
+                Delete User
+            </a>
         </div>
     </div>
 </div>
-
-<!-- CSS -->
 
 {% endblock body %}

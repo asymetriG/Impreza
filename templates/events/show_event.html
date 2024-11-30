@@ -151,15 +151,32 @@
                 map.setCenter(mapOptions.center);
             }
 
+            const infoWindowEvent = new google.maps.InfoWindow({
+                content: "{{event.event_name}}"
+            });
+
+            const infoWindowUser = new google.maps.InfoWindow({
+                content: "{{request.user.username}}"
+            });
+
             // Marker ekle
-            new google.maps.Marker({
+            const markerEvent = new google.maps.Marker({
                 position: { lat: latitude, lng: longitude },
                 map: map,
             });
 
-            new google.maps.Marker({
+            const markerUser = new google.maps.Marker({
                 position: { lat : parseFloat("{{request.user.profile.location.location_latitude}}"), lng: parseFloat("{{request.user.profile.location.location_longitude}}")},
                 map: map,
+            });
+
+            markerEvent.addListener("click", () => {
+                infoWindowEvent.open(map, markerEvent);
+            });
+
+
+            markerUser.addListener("click", () => {
+                infoWindowUser.open(map, markerUser);
             });
         });
     });

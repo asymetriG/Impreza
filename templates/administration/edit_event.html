@@ -26,10 +26,11 @@
             <label for="event_duration" class="form-label">Event Duration (in hours)</label>
             <input type="number" class="form-control" id="event_duration" name="event_duration" value="{{ event.event_duration }}">
         </div>
-        <div class="mb-3">
-            <label for="event_location" class="form-label">Event Location</label>
-            <input type="text" class="form-control" id="event_location" name="event_location" value="{{ event.event_location.location_name }}">
-        </div>
+        <select class="form-select" id="event_location" name="event_location">
+            {% for location in locations %}
+            <option {% if event.event_location.location_name == location.location_name %}selected{% endif %} value="{{location.location_name}}">{{location.location_name}}</option>
+            {% endfor %}
+          </select>
         <div class="mb-3">
             <label for="event_category" class="form-label">Event Category</label>
             <input type="text" class="form-control" id="event_category" name="event_category" value="{{ event.event_category }}">

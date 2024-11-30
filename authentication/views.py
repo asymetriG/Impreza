@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_list_or_404,get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Profile
@@ -25,6 +25,7 @@ def register(request):
         gender = request.POST.get('gender')
         location = Location.objects.filter(location_name=request.POST.get('location'))[0]
         phone_number = request.POST.get('phone')
+        profile_picture = request.FILES['profile_picture']
         
         security_question = request.POST.get('security_question')
         security_question_answer = request.POST.get('security_question_answer')
@@ -57,9 +58,12 @@ def register(request):
             gender=gender,
             location=location,
             phone_number=phone_number,
+            profile_picture=profile_picture,
             security_question=security_question,
             security_question_answer=security_question_answer
         )
+        
+        print(profile_picture)
         
         custom_user.save()
 
@@ -169,6 +173,16 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have successfully logged out.")
     return redirect('index') 
+
+
+def delete_user(request, user_id):
+    
+    user = get_object_or_404(User, id=user_id)
+    user.delete()
+    
+    messages.success(request, 'User deleted successfully. BYE!')
+    return redirect("index")
+        
 
 
 @login_required

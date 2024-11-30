@@ -1,0 +1,9 @@
+admine silme eklenecek
+user şifre sıfırlama
+is_superuser set
+profil fotosunu registera koyma
+messaging düzelcek
+zaman çakışma
+Etkinliklerin harita üzerinde gösterilmesi ve en uygun rotaların önerilmesi. ?
+Başarı kazanma eklenecek
+authentication

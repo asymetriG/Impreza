@@ -22,13 +22,7 @@ def edit_user(request, user_id):
         return redirect('manage_users')
     return render(request, 'administration/edit_user.html', {'user': user})
 
-@user_passes_test(lambda u: u.is_superuser)
-def delete_user(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    if request.method == 'POST':
-        user.delete()
-        messages.success(request, 'User deleted successfully.')
-        return redirect('manage_users')
+
 
 @login_required
 def dashboard(request):
@@ -63,6 +57,7 @@ def dashboard(request):
 @login_required
 def edit_event(request, event_id):
     event = Event.objects.filter(event_id = event_id)[0] 
+    locations = Location.objects.all()
     if request.method == 'POST':
         event.event_name = request.POST.get('event_name')
         event.event_description = request.POST.get('event_description')
@@ -79,5 +74,5 @@ def edit_event(request, event_id):
             return redirect('administration:dashboard')
         else:
             return redirect("events:my_events")
-    return render(request, 'administration/edit_event.html', {'event': event})
+    return render(request, 'administration/edit_event.html', {'event': event,'locations':locations})
 
