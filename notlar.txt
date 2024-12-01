@@ -1,9 +1,0 @@
-admine silme eklenecek EKLENDİ
-user şifre sıfırlama DÜZELDİ
-is_superuser set DÜZELDİ
-profil fotosunu registera koyma DÜZELDİ
-messaging düzelcek DÜZELDİ
-zaman çakışma DÜZELMEDİ
-Etkinliklerin harita üzerinde gösterilmesi ve en uygun rotaların önerilmesi. ? DÜZELDİ
-Başarı kazanma eklenecek DÜZELDİ
-authentication DÜZELDİ
