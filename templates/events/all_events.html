@@ -53,7 +53,7 @@
             const mapDiv = document.getElementById('map');
             let map;
     
-            // Get event locations and user location from the server
+
             const eventLocations = [
                 {% for event in events %}
                     { 
@@ -78,7 +78,7 @@
             mapModal.addEventListener('shown.bs.modal', function () {
                 const mapOptions = {
                     center: { lat: userLocation.lat, lng: userLocation.lng },
-                    zoom: 10, // Adjust zoom level for multiple markers
+                    zoom: 10, 
                 };
     
                 if (!map) {
@@ -87,7 +87,6 @@
                     map.setCenter(mapOptions.center);
                 }
     
-                // Add a marker for the user's location
                 const userMarker = new google.maps.Marker({
                     position: { lat: userLocation.lat, lng: userLocation.lng },
                     map: map,
@@ -101,8 +100,7 @@
                 userMarker.addListener("click", () => {
                     userInfoWindow.open(map, userMarker);
                 });
-    
-                // Add markers for events
+
                 eventLocations.forEach(event => {
                     if (event.lat !== 0 && event.lng !== 0) {
                         const eventMarker = new google.maps.Marker({

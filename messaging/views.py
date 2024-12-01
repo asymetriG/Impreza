@@ -23,7 +23,7 @@ def conversation(request, receiver_id, event_id):
     event = get_object_or_404(Event, event_id=event_id)
     receiver = get_object_or_404(User, id=receiver_id)
     
-    # Fetch messages between the logged-in user and the selected receiver
+
     messages = Message.objects.filter(
         event=event,
         is_to_all=False,

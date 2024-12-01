@@ -26,14 +26,49 @@
             <label for="event_duration" class="form-label">Event Duration (in hours)</label>
             <input type="number" class="form-control" id="event_duration" name="event_duration" value="{{ event.event_duration }}">
         </div>
-        <select class="form-select" id="event_location" name="event_location">
-            {% for location in locations %}
-            <option {% if event.event_location.location_name == location.location_name %}selected{% endif %} value="{{location.location_name}}">{{location.location_name}}</option>
-            {% endfor %}
-          </select>
         <div class="mb-3">
-            <label for="event_category" class="form-label">Event Category</label>
-            <input type="text" class="form-control" id="event_category" name="event_category" value="{{ event.event_category }}">
+            <label for="event_location" class="form-label">Event Location</label>
+            <select class="form-select" id="event_location" name="event_location">
+                {% for location in locations %}
+                <option {% if event.event_location.location_name == location.location_name %}selected{% endif %} value="{{location.location_name}}">{{location.location_name}}</option>
+                {% endfor %}
+              </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="event_category" class="form-label">Interests</label>
+        <select id="event_category" name="event_category" class="form-select">
+            <option value="Football" {% if event.event_category == "Football" %}selected{% endif %}>Football</option>
+            <option value="Basketball" {% if event.event_category == "Basketball" %}selected{% endif %}>Basketball</option>
+            <option value="Volleyball" {% if event.event_category == "Volleyball" %}selected{% endif %}>Volleyball</option>
+            <option value="Chess" {% if event.event_category == "Chess" %}selected{% endif %}>Chess</option>
+            <option value="Art" {% if event.event_category == "Art" %}selected{% endif %}>Art</option>
+            <option value="Books" {% if event.event_category == "Books" %}selected{% endif %}>Books</option>
+            <option value="Cooking" {% if event.event_category == "Cooking" %}selected{% endif %}>Cooking</option>
+            <option value="Movies" {% if event.event_category == "Movies" %}selected{% endif %}>Movies</option>
+            <option value="Music" {% if event.event_category == "Music" %}selected{% endif %}>Music</option>
+            <option value="Travel" {% if event.event_category == "Travel" %}selected{% endif %}>Travel</option>
+            <option value="Photography" {% if event.event_category == "Photography" %}selected{% endif %}>Photography</option>
+            <option value="Science" {% if event.event_category == "Science" %}selected{% endif %}>Science</option>
+            <option value="Technology" {% if event.event_category == "Technology" %}selected{% endif %}>Technology</option>
+            <option value="Gaming" {% if event.event_category == "Gaming" %}selected{% endif %}>Gaming</option>
+            <option value="Fitness" {% if event.event_category == "Fitness" %}selected{% endif %}>Fitness</option>
+            <option value="Yoga" {% if event.event_category == "Yoga" %}selected{% endif %}>Yoga</option>
+            <option value="Dance" {% if event.event_category == "Dance" %}selected{% endif %}>Dance</option>
+            <option value="Hiking" {% if event.event_category == "Hiking" %}selected{% endif %}>Hiking</option>
+            <option value="Cycling" {% if event.event_category == "Cycling" %}selected{% endif %}>Cycling</option>
+            <option value="Gardening" {% if event.event_category == "Gardening" %}selected{% endif %}>Gardening</option>
+            <option value="Fishing" {% if event.event_category == "Fishing" %}selected{% endif %}>Fishing</option>
+            <option value="Swimming" {% if event.event_category == "Swimming" %}selected{% endif %}>Swimming</option>
+            <option value="Surfing" {% if event.event_category == "Surfing" %}selected{% endif %}>Surfing</option>
+            <option value="Running" {% if event.event_category == "Running" %}selected{% endif %}>Running</option>
+            <option value="Painting" {% if event.event_category == "Painting" %}selected{% endif %}>Painting</option>
+            <option value="Writing" {% if event.event_category == "Writing" %}selected{% endif %}>Writing</option>
+            <option value="Poetry" {% if event.event_category == "Poetry" %}selected{% endif %}>Poetry</option>
+            <option value="History" {% if event.event_category == "History" %}selected{% endif %}>History</option>
+            <option value="Philosophy" {% if event.event_category == "Philosophy" %}selected{% endif %}>Philosophy</option>
+            <option value="Psychology" {% if event.event_category == "Psychology" %}selected{% endif %}>Psychology</option>
+        </select>
         </div>
         <div class="mb-3">
             <label for="event_image" class="form-label">Event Image</label>

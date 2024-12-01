@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from messaging.models import Message
 from .models import Location
-import math
+import math,datetime
 
 
 achievments = {
@@ -38,7 +38,8 @@ def all_events(request):
 
     user_profile = request.user.profile
     user_interests = set(user_profile.interests.split(',')) if user_profile.interests else set()
-    user_event_history = request.user.events.all()  # User's past attended events
+    
+    user_event_history = request.user.events.all()  
     user_location = user_profile.location
 
     event_scores = []
@@ -75,6 +76,7 @@ def all_events(request):
 @login_required
 def my_profile(request):
     total_point = 0
+    
     user = User.objects.get(username=request.user.username)
     total_points = Point.objects.filter(user=request.user)
 
@@ -120,6 +122,7 @@ def show_event(request, id):
 @login_required
 def delete_event(request, id):
     event = get_object_or_404(Event, event_id=id)
+
     if request.user == event.event_owner:
         event.delete()
         messages.success(request, "Etkinlik başarıyla kaldırıldı.")
@@ -127,36 +130,57 @@ def delete_event(request, id):
     else:
         messages.error(request, "Bu etkinliği kaldırma yetkiniz yok.")
         return redirect('events:show_event', id=id)
+    
+
 
 
 @login_required
 def join_event(request, id):
+
     event = get_object_or_404(Event, event_id=id)
 
-    if event.event_is_approved:
-        if request.user not in event.attendees.all():
-            event.attendees.add(request.user)
 
-            row = Point.objects.filter(user=request.user, event=event)
-
-            if row.exists():
-                row = row.first()
-                row.point_score += 10
-                row.save()
-            else:
-                
-                is_first_event = not Point.objects.filter(user=request.user).exists()
-                initial_points = 10 + (20 if is_first_event else 0)
-                Point.objects.create(user=request.user, event=event, point_score=initial_points)
-
-            messages.success(
-                request, 
-                f"You have successfully joined the event and earned {initial_points} points!"
-            )
-        else:
-            messages.info(request, "You have already joined this event.")
-    else:
+    if not event.event_is_approved:
         messages.error(request, "This event is not approved yet.")
+        return redirect('events:show_event', id=id)
+
+
+    if request.user in event.attendees.all():
+        messages.info(request, "You have already joined this event.")
+        return redirect('events:show_event', id=id)
+
+    for user_event in request.user.events.all():
+        if event.check_conflict(user_event):
+            messages.error(
+                request, 
+                f"You cannot join this event because the times conflict with the '{user_event.event_name}' event."
+            )
+            return redirect('events:show_event', id=id)
+
+    event.attendees.add(request.user)
+
+
+    row = Point.objects.filter(user=request.user, event=event)
+
+    if row.exists():
+
+        row = row.first()
+        row.point_score += 10
+        row.save()
+        earned_points = 10
+    else:
+
+        is_first_event = not Point.objects.filter(user=request.user).exists()
+        initial_points = 10 + (20 if is_first_event else 0)
+        Point.objects.create(user=request.user, event=event, point_score=initial_points)
+        earned_points = initial_points
+
+
+    messages.success(
+        request, 
+        f"You have successfully joined the event and earned {earned_points} points!"
+    )
+
 
     return redirect('events:show_event', id=id)
 
@@ -165,24 +189,32 @@ def join_event(request, id):
 def leave_event(request, event_id):
     event = get_object_or_404(Event, event_id=event_id)
 
-    # Prevent the event owner from leaving their own event
+   
     if request.user == event.event_owner:
         messages.error(request, "You cannot leave your own event.")
         return redirect('events:show_event', id=event_id)
 
     if request.user in event.attendees.all():
+        
         event.attendees.remove(request.user)
 
-        # Deduct points for the event
         point_entry = Point.objects.filter(user=request.user, event=event).first()
+
         if point_entry:
-            point_entry.point_score -= 10
+            
+            user_event_count = request.user.events.count()
+            if user_event_count == 0:  
+                point_entry.point_score -= 30  
+            else:
+                point_entry.point_score -= 10  
+
+
             if point_entry.point_score <= 0:
                 point_entry.delete()
             else:
                 point_entry.save()
 
-        messages.success(request, "You have successfully left the event and 10 points have been deducted.")
+        messages.success(request, "You have successfully left the event.")
     else:
         messages.error(request, "You are not an attendee of this event.")
 
@@ -192,17 +224,25 @@ def leave_event(request, event_id):
 def create_event(request):
     locations = Location.objects.all()
     if request.method == 'POST':
-        # Extract form data
+        
+        
         event_name = request.POST.get('event_name')
-        event_date = request.POST.get('event_date')
+        event_date_str = request.POST.get('event_date')
         event_time = request.POST.get('event_time')
         event_duration = request.POST.get('event_duration')
         event_location = Location.objects.filter(location_name=request.POST.get('event_location'))[0]
         event_category = request.POST.get('interests')
         event_description = request.POST.get('event_description')
         event_image = request.FILES.get('event_image')
+        
+        try:
+            
+            event_date = datetime.datetime.strptime(event_date_str, '%Y-%m-%d')
+        except ValueError:
+            messages.error(request, 'Invalid date format. Please use YYYY-MM-DD.')
+            return redirect('events:create_event')
 
-        # Create the event
+        
         event = Event(
             event_name=event_name,
             event_date=event_date,
@@ -215,6 +255,14 @@ def create_event(request):
             event_owner=request.user,
             event_is_approved=False 
         )
+
+
+        for user_event in request.user.events.all():
+            if (event.check_conflict(user_event)):
+                messages.error(request, f"You cannot create this event because the times are conflicted with {user_event.event_name} event.")
+                return redirect('events:create_event')
+                
+        
         event.save()
 
         Point.objects.create(
@@ -225,7 +273,7 @@ def create_event(request):
 
         event.attendees.add(request.user)
         
-        messages.success(request, 'Event created successfully, and you have been added as an attendee!')
+        messages.success(request, 'Event created successfully!')
         return redirect('events:my_events')
 
     return render(request, 'events/add_event.html',{"locations":locations})

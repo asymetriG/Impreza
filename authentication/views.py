@@ -15,7 +15,8 @@ def index(request):
 
 def register(request):
     if request.method == "POST":
-        # Existing fields
+        
+        
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         username = request.POST.get('username')
@@ -179,6 +180,11 @@ def logout_view(request):
 def delete_user(request, user_id):
     
     user = get_object_or_404(User, id=user_id)
+    
+    if (user.username == request.user.username):
+        messages.error(request, 'You cannot delete yourself as an admin')
+        return redirect("administration:dashboard")
+    
     user.delete()
     
     messages.success(request, 'User deleted successfully. BYE!')
@@ -211,11 +217,10 @@ def reset_password(request):
         request.user.set_password(new_password)
         request.user.save()
 
-        # Update the session to prevent logout
         update_session_auth_hash(request, request.user)
 
         messages.success(request, "Password reset successful!")
-        return redirect("events:my_profile")  # Replace with the name of your home page or another redirect URL
+        return redirect("events:my_profile")  
 
     return render(request, "authentication/reset_password.html")  
 

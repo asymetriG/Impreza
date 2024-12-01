@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import timedelta
 
     
 class Location(models.Model):
@@ -27,7 +27,38 @@ class Event(models.Model):
     def __str__(self):
         return self.event_name
     
+    def check_conflict(self, other_event):
+        if not self.event_date or not self.event_time or not self.event_duration or not other_event.event_date or not other_event.event_time or not other_event.event_duration:
+            return False
 
+        try:
+
+
+            self_hour, self_minute = map(int, self.event_time.split(':'))
+            other_hour, other_minute = map(int, other_event.event_time.split(':'))
+
+
+            self_duration = float(self.event_duration)
+            other_duration = float(other_event.event_duration)
+            
+        except (ValueError, AttributeError):
+
+            return False
+
+
+        self_start = timedelta(hours=self_hour, minutes=self_minute)
+        self_end = self_start + timedelta(hours=self_duration)
+
+        other_start = timedelta(hours=other_hour, minutes=other_minute)
+        other_end = other_start + timedelta(hours=other_duration)
+
+
+
+        if self.event_date.date() != other_event.event_date.date():
+            return False
+
+
+        return self_start < other_end and other_start < self_end
     
 class Point(models.Model):
     point_id = models.AutoField(primary_key=True)

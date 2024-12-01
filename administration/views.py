@@ -68,7 +68,11 @@ def edit_event(request, event_id):
         event.event_duration = request.POST.get('event_duration')
         event.event_location = Location.objects.filter(location_name=request.POST.get('event_location'))[0]
         event.event_category = request.POST.get('event_category')
-        event.event_image = request.FILES.get('event_image')
+        
+        new_event_image = request.FILES.get('event_image')
+        if new_event_image:  
+            event.event_image = new_event_image
+
 
         event.save()
         messages.success(request, 'Event updated successfully.')
